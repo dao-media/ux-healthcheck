@@ -1,3 +1,6 @@
+// ======= UX Health Check Logic =======
+
+// All questions and options, structured
 const questionsData = {
   mobile: [
     { id: "q1", text: "Does your site load in under 3 seconds on mobile?", options: [
@@ -107,18 +110,85 @@ const pages = [
   "results-page"
 ];
 
-// ---- PAGE INIT ----
 document.addEventListener("DOMContentLoaded", function() {
   setupAllCarousels();
   updateProgress();
   setupEventListeners();
   loadAnswers();
-});
+
+  // Expose event handlers globally for HTML
+  window.carouselPrev = function(category) {
+    if (currentQuestion[category] > 0) {
+      currentQuestion[category] -= 1;
+      renderCarouselQuestion(category);
+      updatePageNavButton(category);
+    }
+  };
+
+  window.carouselNext = function(category) {
+    if (currentQuestion[category] < questionsData[category].length - 1) {
+      currentQuestion[category] += 1;
+      renderCarouselQuestion(category);
+      updatePageNavButton(category);
+    }
+  };
+
+  window.onOptionSelect = function(category, idx, qid, value) {
+    answers[qid] = value;
+    saveAnswers();
+    renderCarouselQuestion(category);
+    updatePageNavButton(category);
+  };
+
+  window.prevPage = function() {
+    if (currentPage > 0) {
+      hidePage(pages[currentPage]);
+      currentPage--;
+      showPage(pages[currentPage]);
+      updateProgress();
+      scrollToTop();
+    }
+  };
+
+  window.nextPage = function() {
+    if (currentPage < pages.length - 1) {
+      hidePage(pages[currentPage]);
+      currentPage++;
+      showPage(pages[currentPage]);
+      const cat = questionGroups[pages[currentPage]];
+      if (cat) {
+        currentQuestion[cat] = 0;
+        renderCarouselQuestion(cat);
+        updatePageNavButton(cat);
+      }
+      if (pages[currentPage] === "results-page") calculateResults();
+      updateProgress();
+      scrollToTop();
+    }
+  };
+
+  window.restartAssessment = function() {
+    currentPage = 0;
+    answers = {};
+    localStorage.removeItem('ux-health-answers');
+    ["mobile", "forms", "navigation", "accessibility"].forEach(cat => currentQuestion[cat] = 0);
+    setupAllCarousels();
+    ["mobile", "forms", "navigation", "accessibility"].forEach(updatePageNavButton);
+    pages.forEach(pageId => hidePage(pageId));
+    showPage(pages[0]);
+    updateProgress();
+    scrollToTop();
+  };
+
+}); // END DOMContentLoaded
+
+
 function setupAllCarousels() {
   Object.keys(questionsData).forEach(cat => {
     renderCarouselQuestion(cat);
   });
 }
+
 function renderCarouselQuestion(category) {
   const idx = currentQuestion[category];
   const q = questionsData[category][idx];
@@ -146,33 +216,16 @@ function renderCarouselQuestion(category) {
   html += `</div></div>`;
   container.innerHTML = html;
 }
-window.carouselPrev = function(category) {
-  if (currentQuestion[category] > 0) {
-    currentQuestion[category] -= 1;
-    renderCarouselQuestion(category);
-    updatePageNavButton(category);
-  }
-};
-window.carouselNext = function(category) {
-  if (currentQuestion[category] < questionsData[category].length - 1) {
-    currentQuestion[category] += 1;
-    renderCarouselQuestion(category);
-    updatePageNavButton(category);
-  }
-};
-window.onOptionSelect = function(category, idx, qid, value) {
-  answers[qid] = value;
-  saveAnswers();
-  renderCarouselQuestion(category);
-  updatePageNavButton(category);
-};
+
 function updatePageNavButton(category) {
   const pageId = Object.entries(questionGroups).find(([pid, c]) => c === category)?.[0];
   if (pageId) {
     const allAnswered = questionsData[category].every(q => answers[q.id] !== undefined);
-    document.getElementById(`${category}-next`).disabled = !allAnswered;
+    const btn = document.getElementById(`${category}-next`);
+    if (btn) btn.disabled = !allAnswered;
   }
 }
+
 function updateProgress() {
   const progressFill = document.getElementById('progress-fill');
   const progressText = document.getElementById('progress-text');
@@ -182,40 +235,18 @@ function updateProgress() {
     progressText.textContent = `Step ${Math.min(currentPage + 1, 5)} of 5`;
   }
 }
+
 function setupEventListeners() {
   const emailForm = document.getElementById('email-form');
   if (emailForm) {
     emailForm.addEventListener('submit', handleEmailSubmit);
   }
 }
-window.prevPage = function() {
-  if (currentPage > 0) {
-    hidePage(pages[currentPage]);
-    currentPage--;
-    showPage(pages[currentPage]);
-    updateProgress();
-    scrollToTop();
-  }
-};
-window.nextPage = function() {
-  if (currentPage < pages.length - 1) {
-    hidePage(pages[currentPage]);
-    currentPage++;
-    showPage(pages[currentPage]);
-    const cat = questionGroups[pages[currentPage]];
-    if (cat) {
-      currentQuestion[cat] = 0;
-      renderCarouselQuestion(cat);
-      updatePageNavButton(cat);
-    }
-    if (pages[currentPage] === "results-page") calculateResults();
-    updateProgress();
-    scrollToTop();
-  }
-};
+
 function hidePage(id) { document.getElementById(id).classList.remove('active'); }
 function showPage(id) { document.getElementById(id).classList.add('active'); }
 function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
 function saveAnswers() {
   localStorage.setItem('ux-health-answers', JSON.stringify(answers));
 }
@@ -227,6 +258,7 @@ function loadAnswers() {
     ["mobile", "forms", "navigation", "accessibility"].forEach(updatePageNavButton);
   }
 }
+
 function calculateResults() {
   const scores = {
     mobile: getScoreForQuestions(['q1', 'q2', 'q3', 'q4']),
@@ -237,13 +269,16 @@ function calculateResults() {
   const total = scores.mobile + scores.forms + scores.navigation + scores.accessibility;
   displayResults(total, scores);
 }
+
 function getScoreForQuestions(ids) { return ids.reduce((sum, q) => sum + (answers[q] || 0), 0); }
+
 function displayResults(totalScore, catScores) {
   document.getElementById('total-score').textContent = totalScore;
   document.getElementById('interpretation').innerHTML = getScoreInterpretation(totalScore);
   document.getElementById('breakdown').innerHTML = getCategoryBreakdown(catScores);
   document.getElementById('actions').innerHTML = getActionSteps(catScores, totalScore);
 }
+
 function getScoreInterpretation(score) {
   if (score >= 40) return `<h3 class="success">🎉 Healthy UX (${score}/48)</h3>
       <p>Your UX is in good shape! Focus on fine-tuning and monitoring performance metrics. Consider conducting user testing to identify subtle improvements and maintain your competitive edge.</p>`;
@@ -254,6 +289,7 @@ function getScoreInterpretation(score) {
   return `<h3 class="danger">🆘 UX Emergency (${score}/48)</h3>
       <p>Your UX problems are likely costing you 30-50% of potential conversions. Start with mobile experience immediately—this alone could improve conversions by 15-25% within the first month.</p>`;
 }
+
 function getCategoryBreakdown(categoryScores) {
   const categories = [
     { name: '📱 Mobile Experience', score: categoryScores.mobile, key: 'mobile' },
@@ -282,6 +318,7 @@ function getCategoryBreakdown(categoryScores) {
   });
   return html;
 }
+
 function getActionSteps(categoryScores, totalScore) {
   const categories = { mobile: categoryScores.mobile, forms: categoryScores.forms, navigation: categoryScores.navigation, accessibility: categoryScores.accessibility };
   const lowest = Object.keys(categories).reduce((a, b) => categories[a] < categories[b] ? a : b);
@@ -338,6 +375,7 @@ function getActionSteps(categoryScores, totalScore) {
   }
   return html;
 }
+
 function handleEmailSubmit(e) {
   e.preventDefault();
   e.target.innerHTML = `
@@ -347,15 +385,3 @@ function handleEmailSubmit(e) {
     </div>
   `;
 }
-window.restartAssessment = function() {
-  currentPage = 0;
-  answers = {};
-  localStorage.removeItem('ux-health-answers');
-  ["mobile", "forms", "navigation", "accessibility"].forEach(cat => currentQuestion[cat] = 0);
-  setupAllCarousels();
-  ["mobile", "forms", "navigation", "accessibility"].forEach(updatePageNavButton);
-  pages.forEach(pageId => hidePage(pageId));
-  showPage(pages[0]);
-  updateProgress();
-  scrollToTop();
-};
