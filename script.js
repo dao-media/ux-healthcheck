@@ -110,78 +110,79 @@ const pages = [
   "results-page"
 ];
 
+// ===== Global functions for HTML event handlers =====
+
+window.carouselPrev = function(category) {
+  if (currentQuestion[category] > 0) {
+    currentQuestion[category] -= 1;
+    renderCarouselQuestion(category);
+    updatePageNavButton(category);
+  }
+};
+
+window.carouselNext = function(category) {
+  if (currentQuestion[category] < questionsData[category].length - 1) {
+    currentQuestion[category] += 1;
+    renderCarouselQuestion(category);
+    updatePageNavButton(category);
+  }
+};
+
+window.onOptionSelect = function(category, idx, qid, value) {
+  answers[qid] = value;
+  saveAnswers();
+  renderCarouselQuestion(category);
+  updatePageNavButton(category);
+};
+
+window.prevPage = function() {
+  if (currentPage > 0) {
+    hidePage(pages[currentPage]);
+    currentPage--;
+    showPage(pages[currentPage]);
+    updateProgress();
+    scrollToTop();
+  }
+};
+
+window.nextPage = function() {
+  if (currentPage < pages.length - 1) {
+    hidePage(pages[currentPage]);
+    currentPage++;
+    showPage(pages[currentPage]);
+    const cat = questionGroups[pages[currentPage]];
+    if (cat) {
+      currentQuestion[cat] = 0;
+      renderCarouselQuestion(cat);
+      updatePageNavButton(cat);
+    }
+    if (pages[currentPage] === "results-page") calculateResults();
+    updateProgress();
+    scrollToTop();
+  }
+};
+
+window.restartAssessment = function() {
+  currentPage = 0;
+  answers = {};
+  localStorage.removeItem('ux-health-answers');
+  ["mobile", "forms", "navigation", "accessibility"].forEach(cat => currentQuestion[cat] = 0);
+  setupAllCarousels();
+  ["mobile", "forms", "navigation", "accessibility"].forEach(updatePageNavButton);
+  pages.forEach(pageId => hidePage(pageId));
+  showPage(pages[0]);
+  updateProgress();
+  scrollToTop();
+};
+
+// ===== DOMContentLoaded: app initialization, listeners, scoring logic =====
+
 document.addEventListener("DOMContentLoaded", function() {
   setupAllCarousels();
   updateProgress();
   setupEventListeners();
   loadAnswers();
-
-  // Expose event handlers globally for HTML
-  window.carouselPrev = function(category) {
-    if (currentQuestion[category] > 0) {
-      currentQuestion[category] -= 1;
-      renderCarouselQuestion(category);
-      updatePageNavButton(category);
-    }
-  };
-
-  window.carouselNext = function(category) {
-    if (currentQuestion[category] < questionsData[category].length - 1) {
-      currentQuestion[category] += 1;
-      renderCarouselQuestion(category);
-      updatePageNavButton(category);
-    }
-  };
-
-  window.onOptionSelect = function(category, idx, qid, value) {
-    answers[qid] = value;
-    saveAnswers();
-    renderCarouselQuestion(category);
-    updatePageNavButton(category);
-  };
-
-  window.prevPage = function() {
-    if (currentPage > 0) {
-      hidePage(pages[currentPage]);
-      currentPage--;
-      showPage(pages[currentPage]);
-      updateProgress();
-      scrollToTop();
-    }
-  };
-
-  window.nextPage = function() {
-    if (currentPage < pages.length - 1) {
-      hidePage(pages[currentPage]);
-      currentPage++;
-      showPage(pages[currentPage]);
-      const cat = questionGroups[pages[currentPage]];
-      if (cat) {
-        currentQuestion[cat] = 0;
-        renderCarouselQuestion(cat);
-        updatePageNavButton(cat);
-      }
-      if (pages[currentPage] === "results-page") calculateResults();
-      updateProgress();
-      scrollToTop();
-    }
-  };
-
-  window.restartAssessment = function() {
-    currentPage = 0;
-    answers = {};
-    localStorage.removeItem('ux-health-answers');
-    ["mobile", "forms", "navigation", "accessibility"].forEach(cat => currentQuestion[cat] = 0);
-    setupAllCarousels();
-    ["mobile", "forms", "navigation", "accessibility"].forEach(updatePageNavButton);
-    pages.forEach(pageId => hidePage(pageId));
-    showPage(pages[0]);
-    updateProgress();
-    scrollToTop();
-  };
-
-}); // END DOMContentLoaded
-
+});
 
 function setupAllCarousels() {
   Object.keys(questionsData).forEach(cat => {
@@ -214,7 +215,7 @@ function renderCarouselQuestion(category) {
     `;
   });
   html += `</div></div>`;
-  container.innerHTML = html;
+  if (container) container.innerHTML = html;
 }
 
 function updatePageNavButton(category) {
