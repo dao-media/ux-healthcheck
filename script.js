@@ -1,6 +1,5 @@
-// ======= UX Health Check Logic – FULL ADJUSTED =======
+// ========= UX Health Check Script =========
 
-// All questions and options, structured
 const questionsData = {
   mobile: [
     { id: "q1", text: "Does your site load in under 3 seconds on mobile?", options: [
@@ -175,8 +174,6 @@ window.restartAssessment = function() {
   scrollToTop();
 };
 
-// ===== DOMContentLoaded: app initialization, listeners, scoring logic =====
-
 document.addEventListener("DOMContentLoaded", function() {
   setupAllCarousels();
   updateProgress();
@@ -199,12 +196,10 @@ function renderCarouselQuestion(category) {
   const score = ids.reduce((sum, id) => sum + (answers[id] || 0), 0);
   const pct = score / (ids.length * 3);
 
-  // Thermometer color
   let thermometerColor = "#50fa7b";
   if (pct < 0.5) thermometerColor = "#f87171";
   else if (pct < 0.8) thermometerColor = "#fbbc05";
 
-  // Card glow classes
   if (parentCard) {
     parentCard.classList.remove("glow-safe", "glow-warn", "glow-danger");
     if (pct >= 0.8) parentCard.classList.add("glow-safe");
@@ -212,21 +207,20 @@ function renderCarouselQuestion(category) {
     else parentCard.classList.add("glow-danger");
   }
 
-  // Thermometer HTML
   const thermometer = `
     <div class="thermometer-bar">
       <div class="thermometer-fill" style="width:${pct*100}%;background:${thermometerColor};"></div>
     </div>`;
 
-  // Arrows
   const numQuestions = questionsData[category].length;
   const showLeft = idx > 0;
   const showRight = idx < numQuestions - 1;
 
   let html = thermometer + `<div class="carousel">`;
-  if (showLeft) {
-    html += `<button type="button" class="carousel-btn" onclick="carouselPrev('${category}')">&#8592;</button>`;
-  }
+  html += `<button type="button" class="carousel-btn" 
+              onclick="carouselPrev('${category}')" 
+              style="visibility:${showLeft ? 'visible':'hidden'}">&#8592;</button>`;
+
   html += `<div class="carousel-content-inner"><div class="question-card"><h3>${q.text}</h3><div class="options">`;
   q.options.forEach(opt => {
     const checked = answers[q.id] == opt.value ? "checked" : "";
@@ -247,13 +241,12 @@ function renderCarouselQuestion(category) {
     `;
   });
   html += `</div></div></div>`;
-  if (showRight) {
-    html += `<button type="button" class="carousel-btn" onclick="carouselNext('${category}')">&#8594;</button>`;
-  }
+  html += `<button type="button" class="carousel-btn" 
+              onclick="carouselNext('${category}')"
+              style="visibility:${showRight ? 'visible':'hidden'}">&#8594;</button>`;
   html += `</div>`;
   if (container) container.innerHTML = html;
 
-  // Hide/show Continue
   updatePageNavButton(category);
 }
 
