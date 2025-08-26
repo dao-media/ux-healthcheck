@@ -69,25 +69,6 @@ body {
     font-weight: 500;
 }
 
-/* (Glow classes remain in case you want to self-style the card, but are not used otherwise.)
-.card.glow-safe { box-shadow: 0 0 20px 2px #50fa7b, var(--shadow-md); transition: box-shadow .4s; }
-.card.glow-warn { box-shadow: 0 0 20px 2px #fbbc05, var(--shadow-md); transition: box-shadow .4s; }
-.card.glow-danger { box-shadow: 0 0 20px 2px #f87171, var(--shadow-md); transition: box-shadow .4s; }
-*/
-
-/* Pages */
-.page {
-    display: none;
-}
-.page.active {
-    display: block;
-    animation: fadeIn 0.3s ease;
-}
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
 /* Cards */
 .card {
     background: var(--card-background);
@@ -98,7 +79,7 @@ body {
     margin-bottom: 24px;
 }
 
-/* Welcome Page */
+/* Welcome Page & Mock Result */
 .welcome-card, .welcome-content {
     text-align: center;
 }
@@ -106,15 +87,87 @@ body {
     display: inline-flex;
     margin: 0 auto;
 }
-.welcome-content h1 {
-    font-size: 2.5rem;
+.goal-reminder {
+    margin-top: 16px;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+.mini-result-card {
+    display: inline-block;
+    background: #fafbfc;
+    border-radius: 12px;
+    border: 1.5px solid #e5e7eb;
+    box-shadow: 0 2px 8px 0 rgb(80 250 123 / 10%);
+    margin-top: 32px;
+    margin-bottom: 10px;
+    padding: 20px 28px 8px 28px;
+    text-align: left;
+    min-width: 240px;
+    max-width: 360px;
+    font-size: 0.96em;
+    position: relative;
+}
+.mini-result-header {
     font-weight: 700;
-    margin-bottom: 16px;
-    background: linear-gradient(135deg, var(--primary-color), #3b82f6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1.2;
+    font-size: 1.15em;
+    color: #059669;
+    margin-bottom: 12px;
+}
+.mini-result-score {
+    color: #2563eb;
+    font-weight: 700;
+    font-size: 2.4em;
+    display: inline-block;
+    margin-right: 12px;
+    vertical-align: middle;
+}
+.mini-result-of {
+    color: #888;
+    font-weight: 500;
+    font-size: 1.1em;
+    vertical-align: middle;
+    opacity: 0.85;
+}
+.mini-result-good { color: #059669; }
+.mini-result-categories {
+    margin: 18px 0 0 0;
+    font-size: .94em;
+    padding-left: 0;
+    list-style: none;
+}
+.mini-result-categories li {
+    margin: 0 0 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+    background: none;
+    border: none;
+    padding: 0;
+}
+.mini-result-catlabel { color: #64748b; }
+.mini-result-catscore { font-weight: 600; }
+.mini-result-prior {
+    display:block;
+    margin-top:10px;
+    color:#2563eb;
+    font-size:.92em;
+    font-weight: 600;
+}
+.mini-result-arrow {
+    display:inline-block;font-size:1.3em;margin-right:6px;vertical-align:middle;
+}
+.welcome-threshold {
+    display: block;
+    margin: 24px auto 0 auto;
+    font-size: 1em;
+    color: #d97706;
+    background: #fff8e1;
+    border-radius: 8px;
+    max-width: 340px;
+    padding: 10px 15px;
+    font-weight: 600;
 }
 .subtitle {
     font-size: 1.125rem;
@@ -408,6 +461,7 @@ body {
 .score-total {
     color: var(--text-secondary);
     font-size: 1.5rem;
+    margin-left: 2px;
 }
 .score-interpretation {
     background: #fafbfc;
@@ -426,6 +480,9 @@ body {
     color: var(--text-primary);
     font-size: 1.125rem;
     font-weight: 600;
+}
+.category-breakdown span {
+    font-size: inherit !important;
 }
 .category-score {
     display: flex;
