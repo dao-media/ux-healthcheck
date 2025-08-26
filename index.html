@@ -9,18 +9,19 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Card glow classes and thermometer styling */
-    .card.glow-safe    { box-shadow: 0 0 20px 2px #50fa7b, var(--shadow-md); transition: box-shadow .4s;}
-    .card.glow-warn    { box-shadow: 0 0 20px 2px #fbbc05, var(--shadow-md); transition: box-shadow .4s;}
-    .card.glow-danger  { box-shadow: 0 0 20px 2px #f87171, var(--shadow-md); transition: box-shadow .4s;}
+    .welcome-card, .welcome-content { text-align: center; }
+    .welcome-card .primary-btn { display: inline-flex; margin: 0 auto; }
+    /* Fallbacks if you don’t have them in styles.css */
+    .card.glow-safe { box-shadow: 0 0 20px 2px #50fa7b, var(--shadow-md); }
+    .card.glow-warn { box-shadow: 0 0 20px 2px #fbbc05, var(--shadow-md); }
+    .card.glow-danger { box-shadow: 0 0 20px 2px #f87171, var(--shadow-md); }
     .thermometer-bar {
-      height:8px; width:100%;background:#eeeeee;border-radius:4px;margin-bottom:16px;overflow:hidden;
+      height:8px;width:100%;background:#eeeeee;border-radius:4px;margin-bottom:16px;overflow:hidden;
     }
     .thermometer-fill {
-      height:100%;transition:width 0.4s;
-      border-radius:4px 0 0 4px;
+      height:100%;border-radius:4px 0 0 4px;transition:width 0.4s;
     }
-    /* (other CSS from styles.css is loaded separately) */
+    /* (The rest is in styles.css) */
   </style>
 </head>
 <body>
@@ -33,7 +34,7 @@
 
   <!-- Welcome Page -->
   <div class="page active" id="welcome-page">
-    <div class="card">
+    <div class="card welcome-card">
       <div class="welcome-content">
         <h1>🎯 The 5-Minute UX Health Check</h1>
         <p class="subtitle">Discover what's costing you conversions and get a personalized improvement plan.</p>
