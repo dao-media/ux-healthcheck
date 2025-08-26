@@ -9,9 +9,85 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Ensure welcome card and button are centered, in case styles.css is stale */
     .welcome-card, .welcome-content { text-align: center; }
     .welcome-card .primary-btn { display: inline-flex; margin: 0 auto; }
+    .mini-result-card {
+      display: inline-block;
+      background: #fafbfc;
+      border-radius: 12px;
+      border: 1.5px solid #e5e7eb;
+      box-shadow: 0 2px 8px 0 rgb(80 250 123 / 10%);
+      margin-top: 32px;
+      margin-bottom: 10px;
+      padding: 20px 28px 8px 28px;
+      text-align: left;
+      min-width: 240px;
+      max-width: 360px;
+      font-size: 0.9em;
+      position: relative;
+    }
+    .mini-result-header {
+      font-weight: 700;
+      font-size: 1.15em;
+      color: #059669;
+      margin-bottom: 12px;
+    }
+    .mini-result-score {
+      color: #2563eb;
+      font-weight: 700;
+      font-size: 2.4em;
+      display: inline-block;
+      margin-right: 12px;
+      vertical-align: middle;
+    }
+    .mini-result-of {
+      color: #888;
+      font-weight: 500;
+      font-size: 1.1em;
+      vertical-align: middle;
+      opacity: 0.85;
+    }
+    .mini-result-good { color: #059669; }
+    .mini-result-categories {
+      margin: 18px 0 0 0;
+      font-size: .94em;
+      padding-left: 0;
+      list-style: none;
+    }
+    .mini-result-categories li {
+      margin: 0 0 5px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    .mini-result-catlabel { color: #64748b; }
+    .mini-result-catscore { font-weight: 600; }
+    .mini-result-prior {
+      display:block;
+      margin-top:10px;
+      color:#2563eb;
+      font-size:.92em;
+      font-weight: 600;
+    }
+    .mini-result-arrow {
+      display:inline-block;font-size:1.3em;margin-right:6px;vertical-align:middle;
+    }
+    .welcome-threshold {
+      display: block;
+      margin: 24px auto 0 auto;
+      font-size: 1em;
+      color: #d97706;
+      background: #fff8e1;
+      border-radius: 8px;
+      max-width: 340px;
+      padding: 10px 15px;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
@@ -28,6 +104,32 @@
       <div class="welcome-content">
         <h1>🎯 The 5-Minute UX Health Check</h1>
         <p class="subtitle">Discover what's costing you conversions and get a personalized improvement plan.</p>
+        <p class="goal-reminder" style="margin-top:18px;">
+          <strong>Higher scores mean your site is more accessible and user-friendly.</strong>
+        </p>
+
+        <!-- Mini result card: Mockup preview -->
+        <div class="mini-result-card" aria-label="Example results preview">
+          <div class="mini-result-header">Example Great Result</div>
+          <span class="mini-result-score">92%</span>
+          <span class="mini-result-of">(44/48)</span>
+          <span class="mini-result-good">&nbsp;Excellent!</span>
+          <ul class="mini-result-categories">
+            <li><span class="mini-result-catlabel">Mobile Experience</span> <span class="mini-result-catscore">92%</span></li>
+            <li><span class="mini-result-catlabel">Forms & Conversion</span> <span class="mini-result-catscore">100%</span></li>
+            <li><span class="mini-result-catlabel">Navigation & Findability</span> <span class="mini-result-catscore">83%</span></li>
+            <li><span class="mini-result-catlabel">Accessibility & Clarity</span> <span class="mini-result-catscore">92%</span></li>
+          </ul>
+          <span class="mini-result-prior">
+            <span class="mini-result-arrow">⬆️</span>Start with your lowest scoring area for best results
+          </span>
+        </div>
+
+        <!-- Threshold guideline (percent style) -->
+        <div class="welcome-threshold">
+          You should aim for at least <strong>67%</strong> <span style="font-weight:400;">(32/48)</span> for a truly accessible, user-friendly site.
+        </div>
+
         <div class="stats-grid">
           <div class="stat"><div class="stat-number">70%</div><div class="stat-label">of carts abandoned</div></div>
           <div class="stat"><div class="stat-number">53%</div><div class="stat-label">leave slow sites</div></div>
@@ -121,6 +223,9 @@
     <div class="card">
       <div class="results-header">
         <h2>🎯 Your UX Health Check Results</h2>
+        <p id="results-score-reminder" style="text-align: center; margin-top:-20px; margin-bottom: 18px; color:#64748b; display:none;">
+          <strong>Higher scores mean a healthier, smoother user experience and accessibility for all.</strong>
+        </p>
         <div class="total-score">
           <span class="score-number" id="total-score">0</span>
           <span class="score-total">/48</span>
@@ -128,6 +233,7 @@
       </div>
       <div class="score-interpretation" id="interpretation"></div>
       <div class="category-breakdown" id="breakdown"></div>
+      <div id="priority-explanation"></div>
       <div class="action-steps" id="actions"></div>
       <div class="email-capture">
         <h3>📧 Get the Complete UX Recovery Guide</h3>
