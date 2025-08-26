@@ -10,8 +10,8 @@ body, html { font-family: Inter, 'Basic Sans', 'Open Sans', sans-serif; }
     --primary-hover: #1d4ed8;
     --secondary-color: #64748b;
     --success-color: #059669;
-    --warning-color: #d97706;
-    --danger-color: #dc2626;
+    --warning-color: #fbbc05;
+    --danger-color: #f87171;
     --background: #fafafa;
     --card-background: #ffffff;
     --border-color: #e5e7eb;
@@ -67,6 +67,35 @@ body {
     font-size: 14px;
     color: var(--text-secondary);
     font-weight: 500;
+}
+
+/* Glowing Card Styles for Category Thermometer */
+.card.glow-safe {
+    box-shadow: 0 0 20px 2px #50fa7b, var(--shadow-md);
+    transition: box-shadow .4s;
+}
+.card.glow-warn {
+    box-shadow: 0 0 20px 2px #fbbc05, var(--shadow-md);
+    transition: box-shadow .4s;
+}
+.card.glow-danger {
+    box-shadow: 0 0 20px 2px #f87171, var(--shadow-md);
+    transition: box-shadow .4s;
+}
+
+/* Thermometer Progress Bar Inside Question Card */
+.thermometer-bar {
+    height: 8px;
+    width: 100%;
+    background: #eeeeee;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+.thermometer-fill {
+    height: 100%;
+    border-radius: 4px 0 0 4px;
+    transition: width 0.4s;
 }
 
 /* Pages */
@@ -183,8 +212,15 @@ body {
     align-items: center;
     justify-content: center;
     gap: 16px;
-    margin-bottom: 32px;
+    margin-bottom: 0;
 }
+.carousel-content-inner {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+}
+
 .carousel-btn {
     background: none;
     border: none;
@@ -199,12 +235,6 @@ body {
     color: var(--primary-hover);
     background: #f4f8ff;
     outline: none;
-}
-.carousel-content {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
 }
 .question-card {
     background: var(--card-background);
@@ -298,10 +328,8 @@ body {
     color: var(--text-primary);
     margin-bottom: 2px;
 }
-.option-desc {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-}
+/* .option-desc REMOVED per "hide point values" */
+
 .checkmark {
     width: 20px;
     height: 20px;
@@ -340,8 +368,6 @@ body {
     padding-top: 24px;
     border-top: 1px solid var(--border-color);
 }
-
-/* Buttons */
 .primary-btn {
     background: var(--primary-color);
     color: white;
@@ -462,7 +488,6 @@ body {
     flex-shrink: 0;
     margin-top: 2px;
 }
-
 /* Email Capture */
 .email-capture {
     background: linear-gradient(135deg, var(--primary-color), #3b82f6);
@@ -524,7 +549,6 @@ body {
     text-align: center;
     margin-top: 32px;
 }
-
 /* Mobile Responsive */
 @media (max-width: 768px) {
     .container {
@@ -555,11 +579,11 @@ body {
         width: 100%;
         justify-content: center;
     }
-    .carousel-content {
+    .carousel-content-inner {
         min-width: 80vw;
     }
     .question-card {
-        padding:20px 8px;
+        padding: 20px 8px;
     }
 }
 
@@ -570,8 +594,6 @@ body {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
 }
-
-/* Loading States */
 .loading {
     opacity: 0.6;
     pointer-events: none;
