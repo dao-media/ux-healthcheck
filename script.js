@@ -1,4 +1,4 @@
-// ========= UX Health Check Script – No Thermometer, Glow by Total Score, Stable Arrows =========
+// ======= UX Health Check Script — Clean/No Glow/No Thermometer =======
 
 const questionsData = {
   mobile: [
@@ -109,8 +109,6 @@ const pages = [
   "results-page"
 ];
 
-// ===== Global functions for HTML event handlers =====
-
 window.carouselPrev = function(category) {
   if (currentQuestion[category] > 0) {
     currentQuestion[category] -= 1;
@@ -191,21 +189,6 @@ function renderCarouselQuestion(category) {
   const idx = currentQuestion[category];
   const q = questionsData[category][idx];
   const container = document.getElementById(`${category}-carousel`);
-  const parentCard = document.getElementById(`${category}-card`);
-  // Compute cumulative total score for all questions
-  const allIds = [
-    'q1','q2','q3','q4','q5','q6','q7','q8',
-    'q9','q10','q11','q12','q13','q14','q15','q16'
-  ];
-  const totalScore = allIds.reduce((sum,q) => sum + (answers[q] || 0), 0);
-  const pct = totalScore / 48;
-
-  if (parentCard) {
-    parentCard.classList.remove("glow-safe", "glow-warn", "glow-danger");
-    if (pct >= 0.8) parentCard.classList.add("glow-safe");
-    else if (pct >= 0.6) parentCard.classList.add("glow-warn");
-    else parentCard.classList.add("glow-danger");
-  }
 
   const numQuestions = questionsData[category].length;
   const showLeft = idx > 0;
