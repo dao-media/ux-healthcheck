@@ -34,6 +34,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
 .container {
     max-width: 800px;
     margin: 0 auto;
@@ -69,7 +70,7 @@ body {
     font-weight: 500;
 }
 
-/* Glowing Card Styles for Category Thermometer */
+/* Card Glows for UX Status */
 .card.glow-safe {
     box-shadow: 0 0 20px 2px #50fa7b, var(--shadow-md);
     transition: box-shadow .4s;
@@ -81,21 +82,6 @@ body {
 .card.glow-danger {
     box-shadow: 0 0 20px 2px #f87171, var(--shadow-md);
     transition: box-shadow .4s;
-}
-
-/* Thermometer Progress Bar Inside Question Card */
-.thermometer-bar {
-    height: 8px;
-    width: 100%;
-    background: #eeeeee;
-    border-radius: 4px;
-    margin-bottom: 16px;
-    overflow: hidden;
-}
-.thermometer-fill {
-    height: 100%;
-    border-radius: 4px 0 0 4px;
-    transition: width 0.4s;
 }
 
 /* Pages */
@@ -122,9 +108,12 @@ body {
 }
 
 /* Welcome Page */
-.welcome-card {
+.welcome-card, .welcome-content {
     text-align: center;
-    padding: 48px 32px;
+}
+.welcome-card .primary-btn {
+    display: inline-flex;
+    margin: 0 auto;
 }
 .welcome-content h1 {
     font-size: 2.5rem;
@@ -220,7 +209,6 @@ body {
     justify-content: center;
     align-items: stretch;
 }
-
 .carousel-btn {
     background: none;
     border: none;
@@ -328,8 +316,6 @@ body {
     color: var(--text-primary);
     margin-bottom: 2px;
 }
-/* .option-desc REMOVED per "hide point values" */
-
 .checkmark {
     width: 20px;
     height: 20px;
@@ -488,7 +474,6 @@ body {
     flex-shrink: 0;
     margin-top: 2px;
 }
-/* Email Capture */
 .email-capture {
     background: linear-gradient(135deg, var(--primary-color), #3b82f6);
     color: white;
