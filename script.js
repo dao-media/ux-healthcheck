@@ -1,4 +1,4 @@
-// ========= UX Health Check Script =========
+// ========= UX Health Check Script – No Thermometer, Glow by Total Score, Stable Arrows =========
 
 const questionsData = {
   mobile: [
@@ -192,35 +192,29 @@ function renderCarouselQuestion(category) {
   const q = questionsData[category][idx];
   const container = document.getElementById(`${category}-carousel`);
   const parentCard = document.getElementById(`${category}-card`);
-  const ids = questionsData[category].map(q => q.id);
-  const score = ids.reduce((sum, id) => sum + (answers[id] || 0), 0);
-  const pct = score / (ids.length * 3);
-
-  let thermometerColor = "#50fa7b";
-  if (pct < 0.5) thermometerColor = "#f87171";
-  else if (pct < 0.8) thermometerColor = "#fbbc05";
+  // Compute cumulative total score for all questions
+  const allIds = [
+    'q1','q2','q3','q4','q5','q6','q7','q8',
+    'q9','q10','q11','q12','q13','q14','q15','q16'
+  ];
+  const totalScore = allIds.reduce((sum,q) => sum + (answers[q] || 0), 0);
+  const pct = totalScore / 48;
 
   if (parentCard) {
     parentCard.classList.remove("glow-safe", "glow-warn", "glow-danger");
     if (pct >= 0.8) parentCard.classList.add("glow-safe");
-    else if (pct >= 0.5) parentCard.classList.add("glow-warn");
+    else if (pct >= 0.6) parentCard.classList.add("glow-warn");
     else parentCard.classList.add("glow-danger");
   }
-
-  const thermometer = `
-    <div class="thermometer-bar">
-      <div class="thermometer-fill" style="width:${pct*100}%;background:${thermometerColor};"></div>
-    </div>`;
 
   const numQuestions = questionsData[category].length;
   const showLeft = idx > 0;
   const showRight = idx < numQuestions - 1;
 
-  let html = thermometer + `<div class="carousel">`;
+  let html = `<div class="carousel">`;
   html += `<button type="button" class="carousel-btn" 
-              onclick="carouselPrev('${category}')" 
+              onclick="carouselPrev('${category}')"
               style="visibility:${showLeft ? 'visible':'hidden'}">&#8592;</button>`;
-
   html += `<div class="carousel-content-inner"><div class="question-card"><h3>${q.text}</h3><div class="options">`;
   q.options.forEach(opt => {
     const checked = answers[q.id] == opt.value ? "checked" : "";
@@ -246,7 +240,6 @@ function renderCarouselQuestion(category) {
               style="visibility:${showRight ? 'visible':'hidden'}">&#8594;</button>`;
   html += `</div>`;
   if (container) container.innerHTML = html;
-
   updatePageNavButton(category);
 }
 
