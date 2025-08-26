@@ -1,93 +1,93 @@
-// ======= UX Health Check Logic =======
+// ======= UX Health Check Logic – FULL ADJUSTED =======
 
 // All questions and options, structured
 const questionsData = {
   mobile: [
     { id: "q1", text: "Does your site load in under 3 seconds on mobile?", options: [
-      { value: 3, label: "Yes, consistently", desc: "3 points" },
-      { value: 1, label: "Usually, but sometimes slower", desc: "1 point" },
-      { value: 0, label: "No, often takes 4+ seconds", desc: "0 points" }
+      { value: 3, label: "Yes, consistently" },
+      { value: 1, label: "Usually, but sometimes slower" },
+      { value: 0, label: "No, often takes 4+ seconds" }
     ] },
     { id: "q2", text: "Can users easily tap all buttons and links on mobile?", options: [
-      { value: 3, label: "Yes, all touch targets are thumb-friendly", desc: "3 points" },
-      { value: 1, label: "Most are fine, some require precision", desc: "1 point" },
-      { value: 0, label: "No, many buttons are too small", desc: "0 points" }
+      { value: 3, label: "Yes, all touch targets are thumb-friendly" },
+      { value: 1, label: "Most are fine, some require precision" },
+      { value: 0, label: "No, many buttons are too small" }
     ] },
     { id: "q3", text: "Is your mobile navigation intuitive?", options: [
-      { value: 3, label: "Yes, mobile navigation is clear and accessible", desc: "3 points" },
-      { value: 1, label: "Mostly, but some areas are confusing", desc: "1 point" },
-      { value: 0, label: "No, it's clearly designed desktop-first", desc: "0 points" }
+      { value: 3, label: "Yes, mobile navigation is clear and accessible" },
+      { value: 1, label: "Mostly, but some areas are confusing" },
+      { value: 0, label: "No, it's clearly designed desktop-first" }
     ] },
     { id: "q4", text: "Do mobile users convert at reasonable rates?", options: [
-      { value: 3, label: "Yes, within 20% of desktop conversion", desc: "3 points" },
-      { value: 1, label: "Somewhat, mobile converts 20-50% lower", desc: "1 point" },
-      { value: 0, label: "No, mobile conversion is terrible", desc: "0 points" }
+      { value: 3, label: "Yes, within 20% of desktop conversion" },
+      { value: 1, label: "Somewhat, mobile converts 20-50% lower" },
+      { value: 0, label: "No, mobile conversion is terrible" }
     ] }
   ],
   forms: [
     { id: "q5", text: "Can users complete signup/checkout without creating an account?", options: [
-      { value: 3, label: "Yes, guest options are prominent", desc: "3 points" },
-      { value: 1, label: "Available but not obvious", desc: "1 point" },
-      { value: 0, label: "No, account creation required", desc: "0 points" }
+      { value: 3, label: "Yes, guest options are prominent" },
+      { value: 1, label: "Available but not obvious" },
+      { value: 0, label: "No, account creation required" }
     ] },
     { id: "q6", text: "Do you show all costs before the final step?", options: [
-      { value: 3, label: "Yes, all costs visible from start", desc: "3 points" },
-      { value: 1, label: "Mostly, some revealed during checkout", desc: "1 point" },
-      { value: 0, label: "No, costs appear at final step", desc: "0 points" }
+      { value: 3, label: "Yes, all costs visible from start" },
+      { value: 1, label: "Mostly, some revealed during checkout" },
+      { value: 0, label: "No, costs appear at final step" }
     ] },
     { id: "q7", text: "How many required fields are in your most important form?", options: [
-      { value: 3, label: "Under 5 fields", desc: "3 points" },
-      { value: 1, label: "5-10 fields", desc: "1 point" },
-      { value: 0, label: "More than 10 fields", desc: "0 points" }
+      { value: 3, label: "Under 5 fields" },
+      { value: 1, label: "5-10 fields" },
+      { value: 0, label: "More than 10 fields" }
     ] },
     { id: "q8", text: "Do users get helpful error messages when forms break?", options: [
-      { value: 3, label: "Yes, specific guidance for fixing errors", desc: "3 points" },
-      { value: 1, label: "Generic messages but users can figure it out", desc: "1 point" },
-      { value: 0, label: "Vague or technical error messages", desc: "0 points" }
+      { value: 3, label: "Yes, specific guidance for fixing errors" },
+      { value: 1, label: "Generic messages but users can figure it out" },
+      { value: 0, label: "Vague or technical error messages" }
     ] }
   ],
   navigation: [
     { id: "q9", text: "Can visitors find your main product/service within 10 seconds?", options: [
-      { value: 3, label: "Yes, primary offering is immediately clear", desc: "3 points" },
-      { value: 1, label: "Usually, but requires some hunting", desc: "1 point" },
-      { value: 0, label: "No, visitors often seem confused", desc: "0 points" }
+      { value: 3, label: "Yes, primary offering is immediately clear" },
+      { value: 1, label: "Usually, but requires some hunting" },
+      { value: 0, label: "No, visitors often seem confused" }
     ] },
     { id: "q10", text: "Is your site search functional and helpful?", options: [
-      { value: 3, label: "Yes, returns relevant results consistently", desc: "3 points" },
-      { value: 1, label: "Works but results aren't always useful", desc: "1 point" },
-      { value: 0, label: "Broken, missing, or returns poor results", desc: "0 points" }
+      { value: 3, label: "Yes, returns relevant results consistently" },
+      { value: 1, label: "Works but results aren't always useful" },
+      { value: 0, label: "Broken, missing, or returns poor results" }
     ] },
     { id: "q11", text: "Can users easily return to previous pages or start over?", options: [
-      { value: 3, label: "Yes, clear back/breadcrumb navigation", desc: "3 points" },
-      { value: 1, label: "Available in most places", desc: "1 point" },
-      { value: 0, label: "Users often get stuck or lost", desc: "0 points" }
+      { value: 3, label: "Yes, clear back/breadcrumb navigation" },
+      { value: 1, label: "Available in most places" },
+      { value: 0, label: "Users often get stuck or lost" }
     ] },
     { id: "q12", text: "Do users know where they are in multi-step processes?", options: [
-      { value: 3, label: "Yes, clear progress indicators always visible", desc: "3 points" },
-      { value: 1, label: "Sometimes, but not consistently", desc: "1 point" },
-      { value: 0, label: "No, users are often unsure of progress", desc: "0 points" }
+      { value: 3, label: "Yes, clear progress indicators always visible" },
+      { value: 1, label: "Sometimes, but not consistently" },
+      { value: 0, label: "No, users are often unsure of progress" }
     ] }
   ],
   accessibility: [
     { id: "q13", text: "Is text readable without users needing to zoom or squint?", options: [
-      { value: 3, label: "Yes, all text is clearly legible", desc: "3 points" },
-      { value: 1, label: "Mostly good, some areas are small", desc: "1 point" },
-      { value: 0, label: "No, text is often too small or low contrast", desc: "0 points" }
+      { value: 3, label: "Yes, all text is clearly legible" },
+      { value: 1, label: "Mostly good, some areas are small" },
+      { value: 0, label: "No, text is often too small or low contrast" }
     ] },
     { id: "q14", text: "Can users understand what will happen when they click buttons?", options: [
-      { value: 3, label: "Yes, all actions have clear, descriptive labels", desc: "3 points" },
-      { value: 1, label: "Mostly clear, some generic labels", desc: "1 point" },
-      { value: 0, label: "No, many buttons are vague or misleading", desc: "0 points" }
+      { value: 3, label: "Yes, all actions have clear, descriptive labels" },
+      { value: 1, label: "Mostly clear, some generic labels" },
+      { value: 0, label: "No, many buttons are vague or misleading" }
     ] },
     { id: "q15", text: "Do images have meaningful descriptions for screen readers?", options: [
-      { value: 3, label: "Yes, all important images have descriptive alt text", desc: "3 points" },
-      { value: 1, label: "Some do, others are missing or generic", desc: "1 point" },
-      { value: 0, label: "No, most images lack proper alt text", desc: "0 points" }
+      { value: 3, label: "Yes, all important images have descriptive alt text" },
+      { value: 1, label: "Some do, others are missing or generic" },
+      { value: 0, label: "No, most images lack proper alt text" }
     ] },
     { id: "q16", text: "Can users complete key tasks using only a keyboard?", options: [
-      { value: 3, label: "Yes, full keyboard navigation works smoothly", desc: "3 points" },
-      { value: 1, label: "Mostly, but some areas are difficult", desc: "1 point" },
-      { value: 0, label: "No, keyboard users get stuck", desc: "0 points" }
+      { value: 3, label: "Yes, full keyboard navigation works smoothly" },
+      { value: 1, label: "Mostly, but some areas are difficult" },
+      { value: 0, label: "No, keyboard users get stuck" }
     ] }
   ]
 };
@@ -194,7 +194,40 @@ function renderCarouselQuestion(category) {
   const idx = currentQuestion[category];
   const q = questionsData[category][idx];
   const container = document.getElementById(`${category}-carousel`);
-  let html = `<div class="question-card"><h3>${q.text}</h3><div class="options">`;
+  const parentCard = document.getElementById(`${category}-card`);
+  const ids = questionsData[category].map(q => q.id);
+  const score = ids.reduce((sum, id) => sum + (answers[id] || 0), 0);
+  const pct = score / (ids.length * 3);
+
+  // Thermometer color
+  let thermometerColor = "#50fa7b";
+  if (pct < 0.5) thermometerColor = "#f87171";
+  else if (pct < 0.8) thermometerColor = "#fbbc05";
+
+  // Card glow classes
+  if (parentCard) {
+    parentCard.classList.remove("glow-safe", "glow-warn", "glow-danger");
+    if (pct >= 0.8) parentCard.classList.add("glow-safe");
+    else if (pct >= 0.5) parentCard.classList.add("glow-warn");
+    else parentCard.classList.add("glow-danger");
+  }
+
+  // Thermometer HTML
+  const thermometer = `
+    <div class="thermometer-bar">
+      <div class="thermometer-fill" style="width:${pct*100}%;background:${thermometerColor};"></div>
+    </div>`;
+
+  // Arrows
+  const numQuestions = questionsData[category].length;
+  const showLeft = idx > 0;
+  const showRight = idx < numQuestions - 1;
+
+  let html = thermometer + `<div class="carousel">`;
+  if (showLeft) {
+    html += `<button type="button" class="carousel-btn" onclick="carouselPrev('${category}')">&#8592;</button>`;
+  }
+  html += `<div class="carousel-content-inner"><div class="question-card"><h3>${q.text}</h3><div class="options">`;
   q.options.forEach(opt => {
     const checked = answers[q.id] == opt.value ? "checked" : "";
     html += `
@@ -208,14 +241,20 @@ function renderCarouselQuestion(category) {
         />
         <div class="option-content">
           <div class="option-title">${opt.label}</div>
-          <div class="option-desc">${opt.desc}</div>
         </div>
         <div class="checkmark"></div>
       </label>
     `;
   });
-  html += `</div></div>`;
+  html += `</div></div></div>`;
+  if (showRight) {
+    html += `<button type="button" class="carousel-btn" onclick="carouselNext('${category}')">&#8594;</button>`;
+  }
+  html += `</div>`;
   if (container) container.innerHTML = html;
+
+  // Hide/show Continue
+  updatePageNavButton(category);
 }
 
 function updatePageNavButton(category) {
@@ -223,7 +262,7 @@ function updatePageNavButton(category) {
   if (pageId) {
     const allAnswered = questionsData[category].every(q => answers[q.id] !== undefined);
     const btn = document.getElementById(`${category}-next`);
-    if (btn) btn.disabled = !allAnswered;
+    if (btn) btn.style.display = allAnswered ? "" : "none";
   }
 }
 
