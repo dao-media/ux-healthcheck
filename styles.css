@@ -69,19 +69,11 @@ body {
     font-weight: 500;
 }
 
-/* Card Glow */
-.card.glow-safe {
-    box-shadow: 0 0 20px 2px #50fa7b, var(--shadow-md);
-    transition: box-shadow .4s;
-}
-.card.glow-warn {
-    box-shadow: 0 0 20px 2px #fbbc05, var(--shadow-md);
-    transition: box-shadow .4s;
-}
-.card.glow-danger {
-    box-shadow: 0 0 20px 2px #f87171, var(--shadow-md);
-    transition: box-shadow .4s;
-}
+/* (Glow classes remain in case you want to self-style the card, but are not used otherwise.)
+.card.glow-safe { box-shadow: 0 0 20px 2px #50fa7b, var(--shadow-md); transition: box-shadow .4s; }
+.card.glow-warn { box-shadow: 0 0 20px 2px #fbbc05, var(--shadow-md); transition: box-shadow .4s; }
+.card.glow-danger { box-shadow: 0 0 20px 2px #f87171, var(--shadow-md); transition: box-shadow .4s; }
+*/
 
 /* Pages */
 .page {
@@ -315,7 +307,6 @@ body {
     color: var(--text-primary);
     margin-bottom: 2px;
 }
-/* .option-desc REMOVED per "hide point values" */
 .checkmark {
     width: 20px;
     height: 20px;
