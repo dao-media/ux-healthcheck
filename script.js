@@ -1,4 +1,4 @@
-// ======= UX Health Check Script — Clean/No Glow/No Thermometer =======
+// ======= UX Health Check Script (Percentages, Clear Results) =======
 
 const questionsData = {
   mobile: [
@@ -281,22 +281,51 @@ function calculateResults() {
 
 function getScoreForQuestions(ids) { return ids.reduce((sum, q) => sum + (answers[q] || 0), 0); }
 
+// Format percent with no decimal for full score or 1 decimal otherwise
+function pct(numer, denom) {
+  let percent = Math.round((numer / denom) * 1000) / 10;
+  if (percent === 100 || percent % 1 === 0) return Math.round(percent) + '%';
+  return percent.toFixed(1) + '%';
+}
+
 function displayResults(totalScore, catScores) {
-  document.getElementById('total-score').textContent = totalScore;
+  // Show extra clarity lines at top of results
+  const scoreReminder = document.getElementById("results-score-reminder");
+  if (scoreReminder) scoreReminder.style.display = '';
+
+  // Show "priority explanation" above breakdown
+  document.getElementById('priority-explanation').innerHTML = `
+    <div style="margin-bottom:22px;">
+      <strong>How priorities are set:</strong>
+      Categories are ranked by which area needs the most improvement—so you know where focused attention will have the fastest impact.
+      This may not match percent order if a core UX problem is more urgent than marginal differences elsewhere.
+    </div>`;
+
+  // Show % for total
+  document.getElementById('total-score').textContent = pct(totalScore, 48);
+
+  // Still show interpretation card and numbers
   document.getElementById('interpretation').innerHTML = getScoreInterpretation(totalScore);
+
+  // Show percent breakdown in categories
   document.getElementById('breakdown').innerHTML = getCategoryBreakdown(catScores);
   document.getElementById('actions').innerHTML = getActionSteps(catScores, totalScore);
 }
 
 function getScoreInterpretation(score) {
-  if (score >= 40) return `<h3 class="success">🎉 Healthy UX (${score}/48)</h3>
-      <p>Your UX is in good shape! Focus on fine-tuning and monitoring performance metrics. Consider conducting user testing to identify subtle improvements and maintain your competitive edge.</p>`;
-  if (score >= 30) return `<h3 class="warning">⚠️ Moderate Issues (${score}/48)</h3>
-      <p>You have some problems that are likely costing you conversions. Address your lowest-scoring areas first—these improvements typically show results within 2-4 weeks and can boost conversion rates by 10-25%.</p>`;
-  if (score >= 20) return `<h3 style="color: var(--warning-color);">🚨 Significant Problems (${score}/48)</h3>
-      <p>UX issues are probably costing you substantial revenue. Prioritize the quick wins below—most can be implemented within a week and show immediate impact on user satisfaction and business metrics.</p>`;
-  return `<h3 class="danger">🆘 UX Emergency (${score}/48)</h3>
-      <p>Your UX problems are likely costing you 30-50% of potential conversions. Start with mobile experience immediately—this alone could improve conversions by 15-25% within the first month.</p>`;
+  const percent = Math.round(score / 48 * 100);
+  if (score >= 40) return `<h3 class="success">🎉 Healthy UX (${percent}%)</h3>
+      <p>Your site’s user experience is in great shape! Keep tuning and monitoring to stay ahead.<br>
+      <strong>Higher scores mean a more accessible, easier-to-use site for all.</strong></p>`;
+  if (score >= 30) return `<h3 class="warning">⚠️ Some Moderate Issues (${percent}%)</h3>
+      <p>Your site is solid, but you have areas to improve.<br>
+      <strong>Your score reflects your site's overall health—the higher, the better.</strong></p>`;
+  if (score >= 20) return `<h3 style="color: var(--warning-color);">🚨 Significant Problems (${percent}%)</h3>
+      <p>These issues are likely hurting your users and your revenue.<br>
+      <strong>Aim for a higher score to make your site smoother and more accessible.</strong></p>`;
+  return `<h3 class="danger">🆘 UX Emergency (${percent}%)</h3>
+      <p>Your site may be losing many users due to its current experience.<br>
+      <strong>A higher score means a healthier, more inclusive site, and your prioritized action plan below will get you there fastest.</strong></p>`;
 }
 
 function getCategoryBreakdown(categoryScores) {
@@ -307,7 +336,7 @@ function getCategoryBreakdown(categoryScores) {
     { name: '♿ Accessibility & Clarity', score: categoryScores.accessibility, key: 'accessibility' }
   ];
   categories.sort((a, b) => a.score - b.score);
-  let html = '<h3>Your Priority Areas (Ranked by Need):</h3>';
+  let html = '<h3>Your Priority Areas<br><span style="font-size:0.9em;color:#64748b;font-weight:400;">(Start from the top for most impact)</span></h3>';
   const priorities = [
     '🔥 Immediate attention needed',
     '⚡ Address within 30 days', 
@@ -315,13 +344,13 @@ function getCategoryBreakdown(categoryScores) {
     '✅ Maintain current performance'
   ];
   categories.forEach((cat, index) => {
-    const percentage = Math.round((cat.score / 12) * 100);
+    const percent = pct(cat.score, 12);
     html += `<div class="category-score">
         <div><strong>${cat.name}</strong><br>
         <small style="color: var(--text-secondary);">${priorities[index]}</small></div>
         <div style="text-align: right;">
-            <span style="font-size: 1.25rem; font-weight: 700;">${cat.score}/12</span><br>
-            <small style="color: var(--text-secondary);">${percentage}%</small>
+            <span style="font-size: 1.2rem; font-weight: 700;">${percent}</span><br>
+            <small style="color: var(--text-secondary);">${cat.score}/12</small>
         </div>
     </div>`;
   });
