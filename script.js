@@ -1,70 +1,176 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('assessment-form');
-    const submitBtn = document.getElementById('calculate-btn');
-    const results = document.getElementById('results');
-    const emailForm = document.getElementById('email-form');
+    let currentPage = 0;
+    let answers = {};
     
-    let scores = {
-        mobile: 0,
-        forms: 0,
-        navigation: 0,
-        accessibility: 0
+    const pages = [
+        'welcome-page',
+        'mobile-page', 
+        'forms-page',
+        'navigation-page',
+        'accessibility-page',
+        'results-page'
+    ];
+
+    const questionGroups = {
+        'mobile-page': ['q1', 'q2', 'q3', 'q4'],
+        'forms-page': ['q5', 'q6', 'q7', 'q8'],
+        'navigation-page': ['q9', 'q10', 'q11', 'q12'],
+        'accessibility-page': ['q13', 'q14', 'q15', 'q16']
     };
 
-    // Update category scores in real-time
-    function updateScores() {
-        // Mobile (questions 1-4)
-        scores.mobile = getScoreForQuestions([1, 2, 3, 4]);
-        document.getElementById('mobile-score').textContent = `${scores.mobile}/12`;
-        
-        // Forms (questions 5-8)
-        scores.forms = getScoreForQuestions([5, 6, 7, 8]);
-        document.getElementById('forms-score').textContent = `${scores.forms}/12`;
-        
-        // Navigation (questions 9-12)
-        scores.navigation = getScoreForQuestions([9, 10, 11, 12]);
-        document.getElementById('nav-score').textContent = `${scores.navigation}/12`;
-        
-        // Accessibility (questions 13-16)
-        scores.accessibility = getScoreForQuestions([13, 14, 15, 16]);
-        document.getElementById('a11y-score').textContent = `${scores.accessibility}/12`;
-        
-        // Enable submit button if all questions answered
-        const totalQuestions = 16;
-        const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
-        submitBtn.disabled = answeredQuestions < totalQuestions;
-    }
+    // Initialize
+    updateProgress();
+    setupEventListeners();
 
-    function getScoreForQuestions(questionNumbers) {
-        let score = 0;
-        questionNumbers.forEach(num => {
-            const checked = document.querySelector(`input[name="q${num}"]:checked`);
-            if (checked) {
-                score += parseInt(checked.value);
+    function setupEventListeners() {
+        // Listen for radio button changes
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'radio') {
+                handleAnswerChange(e.target);
             }
         });
-        return score;
+
+        // Email form
+        const emailForm = document.getElementById('email-form');
+        if (emailForm) {
+            emailForm.addEventListener('submit', handleEmailSubmit);
+        }
     }
 
-    // Listen for radio button changes
-    form.addEventListener('change', updateScores);
+    function handleAnswerChange(radio) {
+        answers[radio.name] = parseInt(radio.value);
+        saveAnswers();
+        checkPageCompletion();
+    }
 
-    // Handle form submission
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
+    function checkPageCompletion() {
+        const currentPageId = pages[currentPage];
+        const questions = questionGroups[currentPageId];
         
+        if (questions) {
+            const answered = questions.every(q => answers[q] !== undefined);
+            const nextButton = document.getElementById(currentPageId.replace('-page', '-next'));
+            if (nextButton) {
+                nextButton.disabled = !answered;
+            }
+        }
+    }
+
+    function saveAnswers() {
+        localStorage.setItem('ux-health-answers', JSON.stringify(answers));
+    }
+
+    function loadAnswers() {
+        const saved = localStorage.getItem('ux-health-answers');
+        if (saved) {
+            answers = JSON.parse(saved);
+            // Restore radio button states
+            Object.entries(answers).forEach(([question, value]) => {
+                const radio = document.querySelector(`input[name="${question}"][value="${value}"]`);
+                if (radio) radio.checked = true;
+            });
+            checkPageCompletion();
+        }
+    }
+
+    window.nextPage = function() {
+        if (currentPage < pages.length - 1) {
+            // Hide current page
+            document.getElementById(pages[currentPage]).classList.remove('active');
+            
+            currentPage++;
+            
+            // Show next page
+            document.getElementById(pages[currentPage]).classList.add('active');
+            
+            // If we're at results page, calculate results
+            if (pages[currentPage] === 'results-page') {
+                calculateResults();
+            }
+            
+            updateProgress();
+            scrollToTop();
+        }
+    };
+
+    window.prevPage = function() {
+        if (currentPage > 0) {
+            // Hide current page
+            document.getElementById(pages[currentPage]).classList.remove('active');
+            
+            currentPage--;
+            
+            // Show previous page
+            document.getElementById(pages[currentPage]).classList.add('active');
+            
+            updateProgress();
+            scrollToTop();
+        }
+    };
+
+    window.restartAssessment = function() {
+        currentPage = 0;
+        answers = {};
+        localStorage.removeItem('ux-health-answers');
+        
+        // Clear all radio buttons
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.checked = false;
+        });
+        
+        // Show welcome page
+        pages.forEach(pageId => {
+            document.getElementById(pageId).classList.remove('active');
+        });
+        document.getElementById(pages[0]).classList.add('active');
+        
+        updateProgress();
+        scrollToTop();
+    };
+
+    function updateProgress() {
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-text');
+        
+        if (progressFill && progressText) {
+            const progress = (currentPage / (pages.length - 1)) * 100;
+            progressFill.style.width = progress + '%';
+            progressText.textContent = `Step ${currentPage + 1} of ${pages.length}`;
+        }
+    }
+
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function calculateResults() {
+        const scores = {
+            mobile: getScoreForQuestions(['q1', 'q2', 'q3', 'q4']),
+            forms: getScoreForQuestions(['q5', 'q6', 'q7', 'q8']),
+            navigation: getScoreForQuestions(['q9', 'q10', 'q11', 'q12']),
+            accessibility: getScoreForQuestions(['q13', 'q14', 'q15', 'q16'])
+        };
+
         const totalScore = scores.mobile + scores.forms + scores.navigation + scores.accessibility;
         
-        // Show results
         displayResults(totalScore, scores);
         
-        // Scroll to results
-        results.scrollIntoView({ behavior: 'smooth' });
-    });
+        // Track analytics
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'assessment_complete', {
+                'event_category': 'ux_health_check',
+                'event_label': 'score_' + totalScore
+            });
+        }
+    }
+
+    function getScoreForQuestions(questionIds) {
+        return questionIds.reduce((sum, qId) => {
+            return sum + (answers[qId] || 0);
+        }, 0);
+    }
 
     function displayResults(totalScore, categoryScores) {
-        results.classList.remove('hidden');
-        
         // Display total score
         document.getElementById('total-score').textContent = totalScore;
         
@@ -84,23 +190,23 @@ document.addEventListener('DOMContentLoaded', function() {
     function getScoreInterpretation(score) {
         if (score >= 40) {
             return `
-                <h3 style="color: #28a745;">🎉 Healthy UX (${score}/48)</h3>
-                <p>Your UX is in good shape! Focus on fine-tuning and monitoring performance metrics. Consider conducting user testing to identify subtle improvements.</p>
+                <h3 class="success">🎉 Healthy UX (${score}/48)</h3>
+                <p>Your UX is in good shape! Focus on fine-tuning and monitoring performance metrics. Consider conducting user testing to identify subtle improvements and maintain your competitive edge.</p>
             `;
         } else if (score >= 30) {
             return `
-                <h3 style="color: #ffc107;">⚠️ Moderate Issues (${score}/48)</h3>
-                <p>You have some problems that are likely costing you conversions. Address your lowest-scoring areas first—these improvements typically show results within 2-4 weeks.</p>
+                <h3 class="warning">⚠️ Moderate Issues (${score}/48)</h3>
+                <p>You have some problems that are likely costing you conversions. Address your lowest-scoring areas first—these improvements typically show results within 2-4 weeks and can boost conversion rates by 10-25%.</p>
             `;
         } else if (score >= 20) {
             return `
-                <h3 style="color: #fd7e14;">🚨 Significant Problems (${score}/48)</h3>
-                <p>UX issues are probably costing you substantial revenue. Prioritize the quick wins below—most can be implemented within a week and show immediate impact.</p>
+                <h3 style="color: var(--warning-color);">🚨 Significant Problems (${score}/48)</h3>
+                <p>UX issues are probably costing you substantial revenue. Prioritize the quick wins below—most can be implemented within a week and show immediate impact on user satisfaction and business metrics.</p>
             `;
         } else {
             return `
-                <h3 style="color: #dc3545;">🆘 UX Emergency (${score}/48)</h3>
-                <p>Your UX problems are likely costing you 30-50% of potential conversions. Start with mobile experience immediately—this alone could improve conversions by 15-25%.</p>
+                <h3 class="danger">🆘 UX Emergency (${score}/48)</h3>
+                <p>Your UX problems are likely costing you 30-50% of potential conversions. Start with mobile experience immediately—this alone could improve conversions by 15-25% within the first month.</p>
             `;
         }
     }
@@ -116,23 +222,25 @@ document.addEventListener('DOMContentLoaded', function() {
         // Sort by score (lowest first)
         categories.sort((a, b) => a.score - b.score);
 
-        let html = '<h3>Your Priority Areas:</h3>';
+        let html = '<h3>Your Priority Areas (Ranked by Need):</h3>';
         categories.forEach((cat, index) => {
             const percentage = Math.round((cat.score / 12) * 100);
-            const priority = index === 0 ? 'Immediate attention needed' : 
-                           index === 1 ? 'Address within 30 days' : 
-                           index === 2 ? 'Tackle after first two improve' : 
-                           'Maintain current performance';
+            const priorities = [
+                '🔥 Immediate attention needed',
+                '⚡ Address within 30 days', 
+                '📈 Tackle after first two improve',
+                '✅ Maintain current performance'
+            ];
             
             html += `
                 <div class="category-score">
                     <div>
                         <strong>${cat.name}</strong><br>
-                        <small style="color: #666;">${priority}</small>
+                        <small style="color: var(--text-secondary);">${priorities[index]}</small>
                     </div>
                     <div style="text-align: right;">
-                        <span style="font-size: 1.2rem; font-weight: bold;">${cat.score}/12</span><br>
-                        <small>${percentage}%</small>
+                        <span style="font-size: 1.25rem; font-weight: 700;">${cat.score}/12</span><br>
+                        <small style="color: var(--text-secondary);">${percentage}%</small>
                     </div>
                 </div>
             `;
@@ -155,37 +263,49 @@ document.addEventListener('DOMContentLoaded', function() {
         );
 
         const actionPlans = {
-            mobile: [
-                'Run a mobile speed test using Google PageSpeed Insights',
-                'Increase button sizes to minimum 44px touch targets',
-                'Test your checkout flow on an actual phone',
-                'Implement responsive images and optimize for mobile-first loading'
-            ],
-            forms: [
-                'Remove every non-essential form field immediately',
-                'Add guest checkout option prominently',
-                'Display all costs upfront before checkout begins',
-                'Add inline validation with helpful error messages'
-            ],
-            navigation: [
-                'Add clear breadcrumbs to all pages',
-                'Test if new visitors can find your main offering in under 10 seconds',
-                'Implement or improve your site search functionality',
-                'Add progress indicators to multi-step processes'
-            ],
-            accessibility: [
-                'Increase text size and contrast immediately',
-                'Add descriptive alt text to all images',
-                'Test navigation using only keyboard (no mouse)',
-                'Ensure all buttons and links have clear, descriptive labels'
-            ]
+            mobile: {
+                title: 'Mobile Experience',
+                actions: [
+                    'Run a mobile speed test using Google PageSpeed Insights',
+                    'Increase button sizes to minimum 44px touch targets',
+                    'Test your checkout flow on an actual phone',
+                    'Implement responsive images and optimize for mobile-first loading'
+                ]
+            },
+            forms: {
+                title: 'Forms & Conversion',
+                actions: [
+                    'Remove every non-essential form field immediately',
+                    'Add guest checkout option prominently',
+                    'Display all costs upfront before checkout begins',
+                    'Add inline validation with helpful error messages'
+                ]
+            },
+            navigation: {
+                title: 'Navigation & Findability',
+                actions: [
+                    'Add clear breadcrumbs to all pages',
+                    'Test if new visitors can find your main offering in under 10 seconds',
+                    'Implement or improve your site search functionality',
+                    'Add progress indicators to multi-step processes'
+                ]
+            },
+            accessibility: {
+                title: 'Accessibility & Clarity',
+                actions: [
+                    'Increase text size and contrast immediately',
+                    'Add descriptive alt text to all images',
+                    'Test navigation using only keyboard (no mouse)',
+                    'Ensure all buttons and links have clear, descriptive labels'
+                ]
+            }
         };
 
-        let html = `<h3>Immediate Action Steps:</h3>
-                   <p><strong>Start with ${lowest.charAt(0).toUpperCase() + lowest.slice(1)} (your lowest-scoring area):</strong></p>
+        let html = `<h3>🎯 Start Here: ${actionPlans[lowest].title}</h3>
+                   <p><strong>Focus on your lowest-scoring area first for maximum impact:</strong></p>
                    <ul>`;
         
-        actionPlans[lowest].forEach(action => {
+        actionPlans[lowest].actions.forEach(action => {
             html += `<li>${action}</li>`;
         });
         
@@ -193,8 +313,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (totalScore < 30) {
             html += `
-                <div style="background: #fff3cd; padding: 20px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #ffc107;">
-                    <strong>💡 Next Step:</strong> Pick your #1 priority area and implement one fix this week. 
+                <div style="background: #fef3c7; padding: 20px; border-radius: var(--radius-md); margin-top: 24px; border-left: 4px solid var(--warning-color);">
+                    <strong>💡 Quick Win Strategy:</strong> Pick your #1 priority area and implement one fix this week. 
                     Most of these changes take under 2 hours but can improve conversion rates by 10-30%.
                 </div>
             `;
@@ -203,26 +323,27 @@ document.addEventListener('DOMContentLoaded', function() {
         return html;
     }
 
-    // Handle email form
-    emailForm.addEventListener('submit', function(e) {
+    function handleEmailSubmit(e) {
         e.preventDefault();
-        const email = this.querySelector('input[type="email"]').value;
+        const email = e.target.querySelector('input[type="email"]').value;
         
-        // Here you would typically send to an email service
-        // For now, we'll just show a success message
-        this.innerHTML = `
-            <div style="text-align: center;">
-                <h4>✅ Thanks! Check your email in a few minutes.</h4>
-                <p style="margin-top: 10px; opacity: 0.9;">The complete UX Recovery Guide is on its way.</p>
-            </div>
-        `;
-        
-        // Optional: Track in Google Analytics or other analytics
+        // Track email signup
         if (typeof gtag !== 'undefined') {
             gtag('event', 'email_signup', {
                 'event_category': 'ux_health_check',
                 'event_label': email
             });
         }
-    });
+        
+        // Show success message
+        e.target.innerHTML = `
+            <div style="text-align: center;">
+                <h4 style="margin-bottom: 8px;">✅ Thanks! Check your email in a few minutes.</h4>
+                <p style="margin: 0; opacity: 0.9; font-size: 0.875rem;">The complete UX Recovery Guide is on its way.</p>
+            </div>
+        `;
+    }
+
+    // Load saved answers on page load
+    loadAnswers();
 });
