@@ -5,214 +5,663 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>5-Minute UX Health Check | Free Assessment</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <h1>The 5-Minute UX Health Check</h1>
-            <p class="subtitle">Answer each question based on your website's current state. Get your personalized improvement plan instantly.</p>
-        </header>
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="progress-text" id="progress-text">Step 1 of 5</div>
+        </div>
 
-        <!-- Assessment Form -->
-        <form id="assessment-form" class="assessment">
-            <!-- Mobile Experience -->
-            <section class="category">
-                <h2>📱 Mobile Experience <span class="score-display" id="mobile-score">0/12</span></h2>
-                
-                <div class="question">
-                    <h3>Does your site load in under 3 seconds on mobile?</h3>
-                    <div class="options">
-                        <label><input type="radio" name="q1" value="3"> Yes, consistently</label>
-                        <label><input type="radio" name="q1" value="1"> Usually, but sometimes slower</label>
-                        <label><input type="radio" name="q1" value="0"> No, often takes 4+ seconds</label>
+        <!-- Welcome Page -->
+        <div class="page active" id="welcome-page">
+            <div class="card welcome-card">
+                <div class="welcome-content">
+                    <h1>🎯 The 5-Minute UX Health Check</h1>
+                    <p class="subtitle">Discover what's costing you conversions and get a personalized improvement plan.</p>
+                    
+                    <div class="stats-grid">
+                        <div class="stat">
+                            <div class="stat-number">70%</div>
+                            <div class="stat-label">of carts abandoned</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">53%</div>
+                            <div class="stat-label">leave slow sites</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">96%</div>
+                            <div class="stat-label">have accessibility barriers</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="question">
-                    <h3>Can users easily tap all buttons and links on mobile without zooming?</h3>
-                    <div class="options">
-                        <label><input type="radio" name="q2" value="3"> Yes, all touch targets are thumb-friendly</label>
-                        <label><input type="radio" name="q2" value="1"> Most are fine, some require precision</label>
-                        <label><input type="radio" name="q2" value="0"> No, many buttons are too small</label>
+                    <div class="what-you-get">
+                        <h3>What you'll get:</h3>
+                        <div class="benefits">
+                            <div class="benefit">
+                                <div class="benefit-icon">📊</div>
+                                <div>Instant score across 4 key UX areas</div>
+                            </div>
+                            <div class="benefit">
+                                <div class="benefit-icon">🎯</div>
+                                <div>Prioritized list of improvements</div>
+                            </div>
+                            <div class="benefit">
+                                <div class="benefit-icon">⚡</div>
+                                <div>Quick wins you can implement today</div>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="question">
-                    <h3>Is your mobile navigation intuitive without desktop context?</h3>
-                    <div class="options">
-                        <label><input type="radio" name="q3" value="3"> Yes, mobile navigation is clear and accessible</label>
-                        <label><input type="radio" name="q3" value="1"> Mostly, but some areas are confusing</label>
-                        <label><input type="radio" name="q3" value="0"> No, it's clearly designed desktop-first</label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h3>Do mobile users convert at reasonable rates compared to desktop?</h3>
-                    <div class="options">
-                        <label><input type="radio" name="q4" value="3"> Yes, within 20% of desktop conversion</label>
-                        <label><input type="radio" name="q4" value="1"> Somewhat, mobile converts 20-50% lower</label>
-                        <label><input type="radio" name="q4" value="0"> No, mobile conversion is terrible</label>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Forms & Conversion -->
-            <section class="category">
-                <h2>📋 Form & Conversion Flow <span class="score-display" id="forms-score">0/12</span></h2>
-                
-                <div class="question">
-                    <h3>Can users complete your signup/checkout without creating an account?</h3>
-                    <div class="options">
-                        <label><input type="radio" name="q5" value="3"> Yes, guest options are prominent</label>
-                        <label><input type="radio" name="q5" value="1"> Available but not obvious</label>
-                        <label><input type="radio" name="q5" value="0"> No, account creation required</label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h3>Do you show all costs (shipping, taxes, fees) before the final step?</h3>
-                    <div class="options">
-                        <label><input type="radio" name="q6" value="3"> Yes, all costs visible from start</label>
-                        <label><input type="radio" name="q6" value="1"> Mostly, some revealed during checkout</label>
-                        <label><input type="radio" name="q6" value="0"> No, costs appear at final step</label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h3>How many required fields are in your most important form?</h3>
-                    <div class="options">
-                        <label><input type="radio" name="q7" value="3"> Under 5 fields</label>
-                        <label><input type="radio" name="q7" value="1"> 5-10 fields</label>
-                        <label><input type="radio" name="q7" value="0"> More than 10 fields</label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h3>Do users get helpful error messages when forms break?</h3>
-                    <div class="options">
-                        <label><input type="radio" name="q8" value="3"> Yes, specific guidance for fixing errors</label>
-                        <label><input type="radio" name="q8" value="1"> Generic messages but users can figure it out</label>
-                        <label><input type="radio" name="q8" value="0"> Vague or technical error messages</label>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Navigation & Findability -->
-            <section class="category">
-                <h2>🧭 Navigation & Findability <span class="score-display" id="nav-score">0/12</span></h2>
-                
-                <div class="question">
-                    <h3>Can first-time visitors find your main product/service within 10 seconds?</h3>
-                    <div class="options">
-                        <label><input type="radio" name="q9" value="3"> Yes, primary offering is immediately clear</label>
-                        <label><input type="radio" name="q9" value="1"> Usually, but requires some hunting</label>
-                        <label><input type="radio" name="q9" value="0"> No, visitors often seem confused about what you do</label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h3>Is your site search functional and helpful?</h3>
-                    <div class="options">
-                        <label><input type="radio" name="q10" value="3"> Yes, returns relevant results consistently</label>
-                        <label><input type="radio" name="q10" value="1"> Works but results aren't always useful</label>
-                        <label><input type="radio" name="q10" value="0"> Broken, missing, or returns poor results</label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h3>Can users easily return to previous pages or start over?</h3>
-                    <div class="options">
-                        <label><input type="radio" name="q11" value="3"> Yes, clear back/breadcrumb navigation throughout</label>
-                        <label><input type="radio" name="q11" value="1"> Available in most places</label>
-                        <label><input type="radio" name="q11" value="0"> Users often get stuck or lost</label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h3>Do users know where they are in multi-step processes?</h3>
-                    <div class="options">
-                        <label><input type="radio" name="q12" value="3"> Yes, clear progress indicators always visible</label>
-                        <label><input type="radio" name="q12" value="1"> Sometimes, but not consistently</label>
-                        <label><input type="radio" name="q12" value="0"> No, users are often unsure of progress</label>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Accessibility & Clarity -->
-            <section class="category">
-                <h2>♿ Basic Accessibility & Clarity <span class="score-display" id="a11y-score">0/12</span></h2>
-                
-                <div class="question">
-                    <h3>Is text readable without users needing to zoom or squint?</h3>
-                    <div class="options">
-                        <label><input type="radio" name="q13" value="3"> Yes, all text is clearly legible</label>
-                        <label><input type="radio" name="q13" value="1"> Mostly good, some areas are small</label>
-                        <label><input type="radio" name="q13" value="0"> No, text is often too small or low contrast</label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h3>Can users understand what will happen when they click buttons/links?</h3>
-                    <div class="options">
-                        <label><input type="radio" name="q14" value="3"> Yes, all actions have clear, descriptive labels</label>
-                        <label><input type="radio" name="q14" value="1"> Mostly clear, some generic "click here" type labels</label>
-                        <label><input type="radio" name="q14" value="0"> No, many buttons are vague or misleading</label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h3>Do images have meaningful descriptions for screen readers?</h3>
-                    <div class="options">
-                        <label><input type="radio" name="q15" value="3"> Yes, all important images have descriptive alt text</label>
-                        <label><input type="radio" name="q15" value="1"> Some do, others are missing or generic</label>
-                        <label><input type="radio" name="q15" value="0"> No, most images lack proper alt text</label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h3>Can users complete key tasks using only a keyboard (no mouse)?</h3>
-                    <div class="options">
-                        <label><input type="radio" name="q16" value="3"> Yes, full keyboard navigation works smoothly</label>
-                        <label><input type="radio" name="q16" value="1"> Mostly, but some areas are difficult</label>
-                        <label><input type="radio" name="q16" value="0"> No, keyboard users get stuck</label>
-                    </div>
-                </div>
-            </section>
-
-            <button type="submit" class="submit-btn" id="calculate-btn" disabled>Calculate My UX Health Score</button>
-        </form>
-
-        <!-- Results Section -->
-        <div id="results" class="results hidden">
-            <div class="results-header">
-                <h2>Your UX Health Check Results</h2>
-                <div class="total-score">
-                    <span class="score-number" id="total-score">0</span>
-                    <span class="score-total">/48</span>
+                    <button class="primary-btn" onclick="nextPage()">Start Assessment</button>
+                    <p class="disclaimer">Takes 3-4 minutes • No email required</p>
                 </div>
             </div>
+        </div>
 
-            <div class="score-interpretation" id="interpretation">
-                <!-- Filled by JavaScript -->
+        <!-- Question Pages -->
+        <div class="page" id="mobile-page">
+            <div class="card">
+                <div class="page-header">
+                    <div class="category-icon">📱</div>
+                    <div>
+                        <h2>Mobile Experience</h2>
+                        <p class="category-desc">How well does your site work on smartphones?</p>
+                    </div>
+                </div>
+
+                <div class="questions">
+                    <div class="question">
+                        <h3>Does your site load in under 3 seconds on mobile?</h3>
+                        <div class="options">
+                            <label class="option">
+                                <input type="radio" name="q1" value="3">
+                                <div class="option-content">
+                                    <div class="option-title">Yes, consistently</div>
+                                    <div class="option-desc">3 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q1" value="1">
+                                <div class="option-content">
+                                    <div class="option-title">Usually, but sometimes slower</div>
+                                    <div class="option-desc">1 point</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q1" value="0">
+                                <div class="option-content">
+                                    <div class="option-title">No, often takes 4+ seconds</div>
+                                    <div class="option-desc">0 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <h3>Can users easily tap all buttons and links on mobile?</h3>
+                        <div class="options">
+                            <label class="option">
+                                <input type="radio" name="q2" value="3">
+                                <div class="option-content">
+                                    <div class="option-title">Yes, all touch targets are thumb-friendly</div>
+                                    <div class="option-desc">3 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q2" value="1">
+                                <div class="option-content">
+                                    <div class="option-title">Most are fine, some require precision</div>
+                                    <div class="option-desc">1 point</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q2" value="0">
+                                <div class="option-content">
+                                    <div class="option-title">No, many buttons are too small</div>
+                                    <div class="option-desc">0 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <h3>Is your mobile navigation intuitive?</h3>
+                        <div class="options">
+                            <label class="option">
+                                <input type="radio" name="q3" value="3">
+                                <div class="option-content">
+                                    <div class="option-title">Yes, mobile navigation is clear and accessible</div>
+                                    <div class="option-desc">3 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q3" value="1">
+                                <div class="option-content">
+                                    <div class="option-title">Mostly, but some areas are confusing</div>
+                                    <div class="option-desc">1 point</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q3" value="0">
+                                <div class="option-content">
+                                    <div class="option-title">No, it's clearly designed desktop-first</div>
+                                    <div class="option-desc">0 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <h3>Do mobile users convert at reasonable rates?</h3>
+                        <div class="options">
+                            <label class="option">
+                                <input type="radio" name="q4" value="3">
+                                <div class="option-content">
+                                    <div class="option-title">Yes, within 20% of desktop conversion</div>
+                                    <div class="option-desc">3 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q4" value="1">
+                                <div class="option-content">
+                                    <div class="option-title">Somewhat, mobile converts 20-50% lower</div>
+                                    <div class="option-desc">1 point</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q4" value="0">
+                                <div class="option-content">
+                                    <div class="option-title">No, mobile conversion is terrible</div>
+                                    <div class="option-desc">0 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button class="secondary-btn" onclick="prevPage()">← Back</button>
+                    <button class="primary-btn" id="mobile-next" onclick="nextPage()" disabled>Continue →</button>
+                </div>
             </div>
+        </div>
 
-            <div class="category-breakdown" id="breakdown">
-                <!-- Filled by JavaScript -->
+        <!-- Forms Page -->
+        <div class="page" id="forms-page">
+            <div class="card">
+                <div class="page-header">
+                    <div class="category-icon">📋</div>
+                    <div>
+                        <h2>Forms & Conversion</h2>
+                        <p class="category-desc">How smooth is your checkout and signup process?</p>
+                    </div>
+                </div>
+
+                <div class="questions">
+                    <div class="question">
+                        <h3>Can users complete signup/checkout without creating an account?</h3>
+                        <div class="options">
+                            <label class="option">
+                                <input type="radio" name="q5" value="3">
+                                <div class="option-content">
+                                    <div class="option-title">Yes, guest options are prominent</div>
+                                    <div class="option-desc">3 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q5" value="1">
+                                <div class="option-content">
+                                    <div class="option-title">Available but not obvious</div>
+                                    <div class="option-desc">1 point</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q5" value="0">
+                                <div class="option-content">
+                                    <div class="option-title">No, account creation required</div>
+                                    <div class="option-desc">0 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <h3>Do you show all costs before the final step?</h3>
+                        <div class="options">
+                            <label class="option">
+                                <input type="radio" name="q6" value="3">
+                                <div class="option-content">
+                                    <div class="option-title">Yes, all costs visible from start</div>
+                                    <div class="option-desc">3 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q6" value="1">
+                                <div class="option-content">
+                                    <div class="option-title">Mostly, some revealed during checkout</div>
+                                    <div class="option-desc">1 point</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q6" value="0">
+                                <div class="option-content">
+                                    <div class="option-title">No, costs appear at final step</div>
+                                    <div class="option-desc">0 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <h3>How many required fields are in your most important form?</h3>
+                        <div class="options">
+                            <label class="option">
+                                <input type="radio" name="q7" value="3">
+                                <div class="option-content">
+                                    <div class="option-title">Under 5 fields</div>
+                                    <div class="option-desc">3 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q7" value="1">
+                                <div class="option-content">
+                                    <div class="option-title">5-10 fields</div>
+                                    <div class="option-desc">1 point</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q7" value="0">
+                                <div class="option-content">
+                                    <div class="option-title">More than 10 fields</div>
+                                    <div class="option-desc">0 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <h3>Do users get helpful error messages when forms break?</h3>
+                        <div class="options">
+                            <label class="option">
+                                <input type="radio" name="q8" value="3">
+                                <div class="option-content">
+                                    <div class="option-title">Yes, specific guidance for fixing errors</div>
+                                    <div class="option-desc">3 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q8" value="1">
+                                <div class="option-content">
+                                    <div class="option-title">Generic messages but users can figure it out</div>
+                                    <div class="option-desc">1 point</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q8" value="0">
+                                <div class="option-content">
+                                    <div class="option-title">Vague or technical error messages</div>
+                                    <div class="option-desc">0 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button class="secondary-btn" onclick="prevPage()">← Back</button>
+                    <button class="primary-btn" id="forms-next" onclick="nextPage()" disabled>Continue →</button>
+                </div>
             </div>
+        </div>
 
-            <div class="action-steps" id="actions">
-                <!-- Filled by JavaScript -->
+        <!-- Navigation Page -->
+        <div class="page" id="navigation-page">
+            <div class="card">
+                <div class="page-header">
+                    <div class="category-icon">🧭</div>
+                    <div>
+                        <h2>Navigation & Findability</h2>
+                        <p class="category-desc">Can users find what they need quickly?</p>
+                    </div>
+                </div>
+
+                <div class="questions">
+                    <div class="question">
+                        <h3>Can visitors find your main product/service within 10 seconds?</h3>
+                        <div class="options">
+                            <label class="option">
+                                <input type="radio" name="q9" value="3">
+                                <div class="option-content">
+                                    <div class="option-title">Yes, primary offering is immediately clear</div>
+                                    <div class="option-desc">3 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q9" value="1">
+                                <div class="option-content">
+                                    <div class="option-title">Usually, but requires some hunting</div>
+                                    <div class="option-desc">1 point</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q9" value="0">
+                                <div class="option-content">
+                                    <div class="option-title">No, visitors often seem confused</div>
+                                    <div class="option-desc">0 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <h3>Is your site search functional and helpful?</h3>
+                        <div class="options">
+                            <label class="option">
+                                <input type="radio" name="q10" value="3">
+                                <div class="option-content">
+                                    <div class="option-title">Yes, returns relevant results consistently</div>
+                                    <div class="option-desc">3 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q10" value="1">
+                                <div class="option-content">
+                                    <div class="option-title">Works but results aren't always useful</div>
+                                    <div class="option-desc">1 point</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q10" value="0">
+                                <div class="option-content">
+                                    <div class="option-title">Broken, missing, or returns poor results</div>
+                                    <div class="option-desc">0 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <h3>Can users easily return to previous pages or start over?</h3>
+                        <div class="options">
+                            <label class="option">
+                                <input type="radio" name="q11" value="3">
+                                <div class="option-content">
+                                    <div class="option-title">Yes, clear back/breadcrumb navigation</div>
+                                    <div class="option-desc">3 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q11" value="1">
+                                <div class="option-content">
+                                    <div class="option-title">Available in most places</div>
+                                    <div class="option-desc">1 point</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q11" value="0">
+                                <div class="option-content">
+                                    <div class="option-title">Users often get stuck or lost</div>
+                                    <div class="option-desc">0 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <h3>Do users know where they are in multi-step processes?</h3>
+                        <div class="options">
+                            <label class="option">
+                                <input type="radio" name="q12" value="3">
+                                <div class="option-content">
+                                    <div class="option-title">Yes, clear progress indicators always visible</div>
+                                    <div class="option-desc">3 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q12" value="1">
+                                <div class="option-content">
+                                    <div class="option-title">Sometimes, but not consistently</div>
+                                    <div class="option-desc">1 point</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q12" value="0">
+                                <div class="option-content">
+                                    <div class="option-title">No, users are often unsure of progress</div>
+                                    <div class="option-desc">0 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button class="secondary-btn" onclick="prevPage()">← Back</button>
+                    <button class="primary-btn" id="navigation-next" onclick="nextPage()" disabled>Continue →</button>
+                </div>
             </div>
+        </div>
 
-            <!-- Email Capture -->
-            <div class="email-capture">
-                <h3>Want the Complete UX Recovery Guide?</h3>
-                <p>Get specific implementation steps, tools, and templates to fix your highest-priority issues.</p>
-                <form id="email-form" class="email-form">
-                    <input type="email" placeholder="Enter your email" required>
-                    <button type="submit">Send Me the Guide</button>
-                </form>
+        <!-- Accessibility Page -->
+        <div class="page" id="accessibility-page">
+            <div class="card">
+                <div class="page-header">
+                    <div class="category-icon">♿</div>
+                    <div>
+                        <h2>Accessibility & Clarity</h2>
+                        <p class="category-desc">Is your site usable by everyone?</p>
+                    </div>
+                </div>
+
+                <div class="questions">
+                    <div class="question">
+                        <h3>Is text readable without users needing to zoom or squint?</h3>
+                        <div class="options">
+                            <label class="option">
+                                <input type="radio" name="q13" value="3">
+                                <div class="option-content">
+                                    <div class="option-title">Yes, all text is clearly legible</div>
+                                    <div class="option-desc">3 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q13" value="1">
+                                <div class="option-content">
+                                    <div class="option-title">Mostly good, some areas are small</div>
+                                    <div class="option-desc">1 point</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q13" value="0">
+                                <div class="option-content">
+                                    <div class="option-title">No, text is often too small or low contrast</div>
+                                    <div class="option-desc">0 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <h3>Can users understand what will happen when they click buttons?</h3>
+                        <div class="options">
+                            <label class="option">
+                                <input type="radio" name="q14" value="3">
+                                <div class="option-content">
+                                    <div class="option-title">Yes, all actions have clear, descriptive labels</div>
+                                    <div class="option-desc">3 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q14" value="1">
+                                <div class="option-content">
+                                    <div class="option-title">Mostly clear, some generic labels</div>
+                                    <div class="option-desc">1 point</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q14" value="0">
+                                <div class="option-content">
+                                    <div class="option-title">No, many buttons are vague or misleading</div>
+                                    <div class="option-desc">0 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <h3>Do images have meaningful descriptions for screen readers?</h3>
+                        <div class="options">
+                            <label class="option">
+                                <input type="radio" name="q15" value="3">
+                                <div class="option-content">
+                                    <div class="option-title">Yes, all important images have descriptive alt text</div>
+                                    <div class="option-desc">3 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q15" value="1">
+                                <div class="option-content">
+                                    <div class="option-title">Some do, others are missing or generic</div>
+                                    <div class="option-desc">1 point</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q15" value="0">
+                                <div class="option-content">
+                                    <div class="option-title">No, most images lack proper alt text</div>
+                                    <div class="option-desc">0 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <h3>Can users complete key tasks using only a keyboard?</h3>
+                        <div class="options">
+                            <label class="option">
+                                <input type="radio" name="q16" value="3">
+                                <div class="option-content">
+                                    <div class="option-title">Yes, full keyboard navigation works smoothly</div>
+                                    <div class="option-desc">3 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q16" value="1">
+                                <div class="option-content">
+                                    <div class="option-title">Mostly, but some areas are difficult</div>
+                                    <div class="option-desc">1 point</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q16" value="0">
+                                <div class="option-content">
+                                    <div class="option-title">No, keyboard users get stuck</div>
+                                    <div class="option-desc">0 points</div>
+                                </div>
+                                <div class="checkmark"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button class="secondary-btn" onclick="prevPage()">← Back</button>
+                    <button class="primary-btn" id="accessibility-next" onclick="nextPage()" disabled>See Results →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Page -->
+        <div class="page" id="results-page">
+            <div class="card">
+                <div class="results-header">
+                    <h2>🎯 Your UX Health Check Results</h2>
+                    <div class="total-score">
+                        <span class="score-number" id="total-score">0</span>
+                        <span class="score-total">/48</span>
+                    </div>
+                </div>
+
+                <div class="score-interpretation" id="interpretation">
+                    <!-- Filled by JavaScript -->
+                </div>
+
+                <div class="category-breakdown" id="breakdown">
+                    <!-- Filled by JavaScript -->
+                </div>
+
+                <div class="action-steps" id="actions">
+                    <!-- Filled by JavaScript -->
+                </div>
+
+                <!-- Email Capture -->
+                <div class="email-capture">
+                    <h3>📧 Get the Complete UX Recovery Guide</h3>
+                    <p>Specific implementation steps, templates, and tools to fix your highest-priority issues.</p>
+                    <form id="email-form" class="email-form">
+                        <input type="email" placeholder="Enter your email address" required>
+                        <button type="submit">Send Me the Guide</button>
+                    </form>
+                    <p class="privacy">No spam. Unsubscribe anytime. Your email stays private.</p>
+                </div>
+
+                <div class="restart">
+                    <button class="secondary-btn" onclick="restartAssessment()">↻ Take Assessment Again</button>
+                </div>
             </div>
         </div>
     </div>
