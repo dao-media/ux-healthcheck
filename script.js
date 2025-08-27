@@ -1,4 +1,4 @@
-// ======= UX Health Check Script (Percentages, Clear Results) =======
+// ======= UX Health Check Script — Device-Agnostic Pagination =======
 
 const questionsData = {
   mobile: [
@@ -109,6 +109,7 @@ const pages = [
   "results-page"
 ];
 
+// NAVIGATION: device-agnostic, always hide/show one page only
 window.carouselPrev = function(category) {
   if (currentQuestion[category] > 0) {
     currentQuestion[category] -= 1;
@@ -179,6 +180,7 @@ document.addEventListener("DOMContentLoaded", function() {
   loadAnswers();
 });
 
+// Core wizard: always only one page has .active. This logic is device-agnostic.
 function setupAllCarousels() {
   Object.keys(questionsData).forEach(cat => {
     renderCarouselQuestion(cat);
@@ -252,8 +254,21 @@ function setupEventListeners() {
   }
 }
 
-function hidePage(id) { document.getElementById(id).classList.remove('active'); }
-function showPage(id) { document.getElementById(id).classList.add('active'); }
+function hidePage(id) {
+  const page = document.getElementById(id);
+  if (page) page.classList.remove('active');
+}
+
+function showPage(id) {
+  // Hide all other pages first for full safety (ensures mobile/desktop parity)
+  pages.forEach(pid => {
+    const pg = document.getElementById(pid);
+    if (pg) pg.classList.remove('active');
+  });
+  const page = document.getElementById(id);
+  if (page) page.classList.add('active');
+}
+
 function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
 function saveAnswers() {
@@ -281,7 +296,6 @@ function calculateResults() {
 
 function getScoreForQuestions(ids) { return ids.reduce((sum, q) => sum + (answers[q] || 0), 0); }
 
-// Format percent with no decimal for full score or 1 decimal otherwise
 function pct(numer, denom) {
   let percent = Math.round((numer / denom) * 1000) / 10;
   if (percent === 100 || percent % 1 === 0) return Math.round(percent) + '%';
@@ -293,7 +307,7 @@ function displayResults(totalScore, catScores) {
   const scoreReminder = document.getElementById("results-score-reminder");
   if (scoreReminder) scoreReminder.style.display = '';
 
-  // Show "priority explanation" above breakdown
+  // Priority Explanation above breakdown
   document.getElementById('priority-explanation').innerHTML = `
     <div style="margin-bottom:22px;">
       <strong>How priorities are set:</strong>
@@ -301,13 +315,10 @@ function displayResults(totalScore, catScores) {
       This may not match percent order if a core UX problem is more urgent than marginal differences elsewhere.
     </div>`;
 
-  // Show % for total
+  // Main score as %
   document.getElementById('total-score').textContent = pct(totalScore, 48);
 
-  // Still show interpretation card and numbers
   document.getElementById('interpretation').innerHTML = getScoreInterpretation(totalScore);
-
-  // Show percent breakdown in categories
   document.getElementById('breakdown').innerHTML = getCategoryBreakdown(catScores);
   document.getElementById('actions').innerHTML = getActionSteps(catScores, totalScore);
 }
