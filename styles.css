@@ -260,20 +260,21 @@ body {
     background: #f4f8ff;
     outline: none;
 }
+
+/* ---- SIMPLIFIED QUESTION CARD ---- */
 .question-card {
-    background: var(--card-background);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--primary-color);
-    padding: 32px 24px;
-    max-width: 350px;
-    min-width: 0;
-    width: 100%;
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
     margin: 0 auto;
+    max-width: 350px;
+    width: 100%;
     animation: fadeIn 0.2s;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
 }
 .question-card h3 {
     margin-bottom: 18px;
@@ -281,6 +282,14 @@ body {
     font-weight: 600;
     color: var(--primary-color);
 }
+@media (max-width: 600px) {
+    .question-card {
+        max-width: 80vw;
+        padding: 0 !important;
+    }
+}
+
+/* ---- STEP FRAME/HEADER/SECTIONS ---- */
 .page-header {
     display: flex;
     align-items: center;
@@ -543,7 +552,7 @@ body {
         max-width: 100%;
         overflow-x: visible;
     }
-    .question-card { padding: 20px 8px; }
+    .question-card { padding: 0 !important; }
     .mini-result-card { min-width: 0; width: 100%; max-width: 100%; }
 }
 @media (max-width: 600px) {
@@ -584,7 +593,7 @@ body {
     min-width: 0;
     width: 100%;
     margin: 0 auto;
-    padding: 12px 2px;
+    padding: 0 !important;
     box-sizing: border-box;
   }
 }
