@@ -17,16 +17,20 @@ body, html { font-family: Inter, 'Basic Sans', 'Open Sans', sans-serif; }
     --border-color: #e5e7eb;
     --text-primary: #1e293b;
     --text-secondary: #64748b;
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --radius-sm: 6px;
     --radius-md: 8px;
     --radius-lg: 12px;
 }
 
+/* --- Core step/wizard display --- */
+.page { display: none; }
+.page.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.6;
     color: var(--text-primary);
     background: var(--background);
@@ -43,7 +47,6 @@ body {
     flex-direction: column;
 }
 
-/* Progress Bar */
 .progress-container {
     margin-bottom: 32px;
     text-align: center;
@@ -69,7 +72,6 @@ body {
     font-weight: 500;
 }
 
-/* Cards */
 .card {
     background: var(--card-background);
     border-radius: var(--radius-lg);
@@ -79,19 +81,10 @@ body {
     margin-bottom: 24px;
 }
 
-/* Welcome Page & Mock Result */
-.welcome-card, .welcome-content {
-    text-align: center;
-}
-.welcome-card .primary-btn {
-    display: inline-flex;
-    margin: 0 auto;
-}
-.goal-reminder {
-    margin-top: 16px;
-    color: var(--primary-color);
-    font-weight: 600;
-}
+/* Welcome + Mini Result */
+.welcome-card, .welcome-content { text-align: center; }
+.welcome-card .primary-btn { display: inline-flex; margin: 0 auto; }
+.goal-reminder { margin-top: 16px; color: var(--primary-color); font-weight: 600; }
 .mini-result-card {
     display: inline-block;
     background: #fafbfc;
@@ -128,7 +121,6 @@ body {
     vertical-align: middle;
     opacity: 0.85;
 }
-.mini-result-good { color: #059669; }
 .mini-result-categories {
     margin: 18px 0 0 0;
     font-size: .94em;
@@ -141,7 +133,6 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 8px;
-    font-family: inherit;
     background: none;
     border: none;
     padding: 0;
@@ -290,7 +281,6 @@ body {
     color: var(--primary-color);
 }
 
-/* Question Pages */
 .page-header {
     display: flex;
     align-items: center;
@@ -390,7 +380,6 @@ body {
     transform: rotate(45deg);
 }
 
-/* Navigation */
 .navigation {
     display: flex;
     justify-content: space-between;
@@ -582,61 +571,33 @@ body {
     text-align: center;
     margin-top: 32px;
 }
-/* Mobile Responsive */
+
+/* --- Responsive adjustments --- */
 @media (max-width: 768px) {
-    .container {
-        padding: 16px;
-    }
-    .card {
-        padding: 24px;
-    }
-    .welcome-content h1 {
-        font-size: 2rem;
-    }
+    .container { padding: 16px; }
+    .card { padding: 24px; }
+    .welcome-content h1 { font-size: 2rem; }
     .stats-grid {
         grid-template-columns: 1fr;
         gap: 16px;
         padding: 24px;
     }
-    .email-form {
-        flex-direction: column;
-    }
-    .total-score {
-        font-size: 2.5rem;
-    }
-    .navigation {
-        flex-direction: column;
-        gap: 12px;
-    }
-    .navigation button {
-        width: 100%;
-        justify-content: center;
-    }
-    .carousel-content-inner {
-        min-width: 80vw;
-    }
-    .question-card {
-        padding: 20px 8px;
-    }
+    .email-form { flex-direction: column; }
+    .total-score { font-size: 2.5rem; }
+    .navigation { flex-direction: column; gap: 12px; }
+    .navigation button { width: 100%; justify-content: center; }
+    .carousel-content-inner { min-width: 80vw; }
+    .question-card { padding: 20px 8px; }
+    .mini-result-card { min-width: 0; width: 100%; max-width: 100%; }
 }
 
-/* Focus Styles for Accessibility */
 .primary-btn:focus,
 .secondary-btn:focus,
 .option:focus-within {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
 }
-.loading {
-    opacity: 0.6;
-    pointer-events: none;
-}
-.success {
-    color: var(--success-color);
-}
-.warning {
-    color: var(--warning-color);
-}
-.danger {
-    color: var(--danger-color);
-}
+.loading { opacity: 0.6; pointer-events: none; }
+.success { color: var(--success-color); }
+.warning { color: var(--warning-color); }
+.danger { color: var(--danger-color); }
