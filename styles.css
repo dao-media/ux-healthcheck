@@ -291,13 +291,27 @@ body {
 
 /* --- REMOVE BORDER/BACKGROUND ON .options OR FIELDSET (NO "INNER CARD") --- */
 .options,
+.options *,
 .options-wrapper,
-fieldset {
+.options-wrapper *,
+fieldset,
+fieldset *,
+.question-block,
+.question-block *,
+.question-panel,
+.question-panel * {
     border: none !important;
     background: none !important;
-    border-radius: 0 !important;
     box-shadow: none !important;
+    border-radius: 0 !important;
     padding: 0 !important;
+    margin: 0 !important;
+}
+[style*="border"], [style*="background"] {
+    border: none !important;
+    background: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
 }
 
 /* ---- STEP FRAME/HEADER/SECTIONS ---- */
@@ -566,6 +580,8 @@ fieldset {
     .question-card { padding: 0 !important; }
     .mini-result-card { min-width: 0; width: 100%; max-width: 100%; }
 }
+
+/* ----------- FINAL MOBILE OVERRIDES FOR ARROW/CENTERING ------------- */
 @media (max-width: 600px) {
   .container {
     padding-left: 0;
@@ -573,13 +589,11 @@ fieldset {
     max-width: 100vw;
   }
   .carousel {
-    width: 100vw;
-    max-width: 100vw;
+    width: 100vw !important;
+    max-width: 100vw !important;
     box-sizing: border-box;
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: 0;
-    margin-right: 0;
+    margin: 0 auto;
+    padding: 0;
     overflow-x: visible;
   }
   .carousel-btn {
@@ -593,11 +607,12 @@ fieldset {
     min-width: 0;
     width: 80vw;
     max-width: 80vw;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    overflow-x: visible;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    overflow-x: visible;
   }
   .question-card {
     max-width: 80vw;
@@ -605,6 +620,23 @@ fieldset {
     width: 100%;
     margin: 0 auto;
     padding: 0 !important;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .options {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .option {
+    width: 100%;
+    margin: 0 auto;
     box-sizing: border-box;
   }
 }
