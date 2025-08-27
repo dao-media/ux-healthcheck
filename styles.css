@@ -23,8 +23,8 @@ body, html { font-family: Inter, 'Basic Sans', 'Open Sans', sans-serif; }
 }
 
 /* --- Core step/wizard display --- */
-.page { display: none; }
-.page.active { display: block; animation: fadeIn 0.3s ease; }
+.page { display: none !important; }
+.page.active { display: block !important; }
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -586,11 +586,30 @@ body {
     .total-score { font-size: 2.5rem; }
     .navigation { flex-direction: column; gap: 12px; }
     .navigation button { width: 100%; justify-content: center; }
-    .carousel-content-inner { min-width: 80vw; }
-    .question-card { padding: 20px 8px; }
+    .carousel-content-inner { min-width: 0; width: 100%; max-width: 100%; }
+    .question-card { padding: 20px 8px; min-width: 0; width: 100%; max-width: 100vw; }
     .mini-result-card { min-width: 0; width: 100%; max-width: 100%; }
 }
-
+@media (max-width: 600px) {
+    .carousel { gap: 4px; }
+    .carousel-btn {
+        font-size: 1.6rem;
+        padding: 0 4px;
+        min-width: 36px;
+        flex-shrink: 0;
+    }
+    .carousel-content-inner {
+        min-width: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+    .question-card {
+        padding: 12px 4px;
+        min-width: 0;
+        width: 100%;
+        max-width: 100vw;
+    }
+}
 .primary-btn:focus,
 .secondary-btn:focus,
 .option:focus-within {
