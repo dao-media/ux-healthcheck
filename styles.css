@@ -289,6 +289,17 @@ body {
     }
 }
 
+/* --- REMOVE BORDER/BACKGROUND ON .options OR FIELDSET (NO "INNER CARD") --- */
+.options,
+.options-wrapper,
+fieldset {
+    border: none !important;
+    background: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
 /* ---- STEP FRAME/HEADER/SECTIONS ---- */
 .page-header {
     display: flex;
